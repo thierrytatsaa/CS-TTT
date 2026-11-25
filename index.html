@@ -144,9 +144,9 @@ th{background:#f5f8fb;color:#52667c;font-size:10px;text-transform:uppercase;lett
 .pc.back .bk img{height:10mm;max-width:20mm;object-fit:contain}
 .pc.back .bk .warn{font-weight:800;color:#a8182b}
 .pc.back .sgn{left:6mm;right:6mm;bottom:3.6mm;height:6.4mm;z-index:2;border-top:.2mm solid #7b8da3;font-size:5pt;color:#53667c;padding-top:.6mm;display:flex;justify-content:space-between}
-.print-page.tags{width:calc(40mm*4 + 12mm);grid-template-columns:repeat(4,40mm);grid-auto-rows:56mm;gap:3mm 4mm}
-.ptag{width:40mm;height:56mm;display:flex;flex-direction:column;background:#fff;color:#000;overflow:hidden;font-family:Arial,Helvetica,sans-serif;box-shadow:0 0 0 .2mm #c9ced6}
-.ptag .ph{position:relative;flex:1;min-height:0;background:#e6ebf2}
+.print-page.tags{width:calc(40mm*4 + 12mm);grid-template-columns:repeat(4,40mm);grid-auto-rows:minmax(58mm,auto);gap:3mm 4mm}
+.ptag{width:40mm;height:auto;display:flex;flex-direction:column;background:#fff;color:#000;overflow:hidden;font-family:Arial,Helvetica,sans-serif;box-shadow:0 0 0 .2mm #c9ced6}
+.ptag .ph{position:relative;flex:none;height:45.4mm;background:#e6ebf2}
 .ptag .ph img,.ptag .ph svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 .ptag .dt{position:absolute;top:1.3mm;left:0;right:0;text-align:center;font-weight:800;font-size:10pt;line-height:1.1;text-shadow:0 0 1.2mm #fff,0 0 .6mm #fff}
 .ptag .bd{height:11mm;display:flex;flex-direction:column;justify-content:center;gap:.4mm;padding:0 1.2mm;text-align:center;flex:none}
@@ -175,6 +175,21 @@ th{background:#f5f8fb;color:#52667c;font-size:10px;text-transform:uppercase;lett
  .section-heading h2{font-size:17px}.stat{min-width:calc(50% - 8px)}.stat strong{font-size:22px}
  .review-row{grid-template-columns:1fr}.actions button,.actions .btn{flex:1}
  .roster-row{grid-template-columns:42px minmax(0,1fr)}.row-actions{grid-column:1/-1;justify-content:stretch}.row-actions button{flex:1}
+}
+
+@media screen{
+.top{background:linear-gradient(120deg,#0b1f38,#14507c 60%,#1c7aa8);padding-top:calc(20px + env(safe-area-inset-top))}
+.brand-mark{box-shadow:0 6px 18px #0005;transform:rotate(-4deg)}
+.tabs{position:sticky;top:0;z-index:40;background:#e8eef5ee;backdrop-filter:blur(10px);box-shadow:0 6px 18px #10243e14}
+.tab{min-height:42px;font-weight:700;transition:.15s}
+.tab.active{background:linear-gradient(135deg,#176ba8,#145786);color:#fff;box-shadow:0 4px 12px #17679a55}
+.panel{border-radius:20px;animation:scFade .25s ease}
+@keyframes scFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+button,.btn{min-height:42px;border-radius:12px;transition:transform .1s,box-shadow .15s}
+button:active,.btn:active{transform:scale(.97)}
+input,select,textarea{border-radius:12px;min-height:42px}
+.section-heading h2{background:linear-gradient(90deg,#10243e,#1767a5);-webkit-background-clip:text;background-clip:text;color:transparent}
+@media(max-width:640px){.wrap{padding:0 10px}.panel{padding:16px}.top-inner{flex-wrap:wrap}}
 }
 </style>
 </head>
@@ -219,6 +234,7 @@ th{background:#f5f8fb;color:#52667c;font-size:10px;text-transform:uppercase;lett
  <p class="hint">La sauvegarde (fichier .zip) contient les établissements, élèves et photos. Gardez-en une copie sur une clé USB ou dans le cloud.</p>
  <div class="actions">
   <button id="btnBackupAll">Sauvegarder tout</button>
+  <button id="btnBackupShare">Sauvegarder et envoyer</button>
   <button class="secondary" id="btnBackupCurrent">Sauvegarder cet établissement</button>
   <label class="btn secondary">Restaurer une sauvegarde<input type="file" id="restoreFile" accept=".zip,.json,application/zip,application/json" hidden></label>
  </div>
@@ -263,7 +279,7 @@ th{background:#f5f8fb;color:#52667c;font-size:10px;text-transform:uppercase;lett
    <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="classe"> Classe</label>
    <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="sexe"> Sexe</label>
    <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="ecole"> Nom de l’établissement</label></div>
-  <div class="field" style="margin-top:8px"><label for="tfExtra">Texte libre (ex. centre d’examen, série) — identique pour tous</label><input id="tfExtra" maxlength="60" placeholder="Ex. Centre : 123 — Série : D"></div></div>
+  <div class="field" style="margin-top:8px"><label for="tfExtra">Code de l’établissement (ex. CR 9717) — s’affiche après l’examen et la classe</label><input id="tfExtra" maxlength="60" placeholder="Ex. CR 9717"></div></div>
  <div class="roster-list" id="classesList"></div>
 </section>
 
@@ -653,16 +669,16 @@ function defaultSchool(name){
  const y=defaultYear();
  return{id:uid(),schoolName:name,tutelle:'MINESEC',ministry:TUTELLES.MINESEC.fr,ministryEn:TUTELLES.MINESEC.en,mottoFr:'Paix - Travail - Patrie',mottoEn:'Peace - Work - Fatherland',
   town:'',address:'',phone:'',signatory:'Le Proviseur',schoolType:'LYCEE',issueDate:todayISO(),primaryColor:'#0b2a5b',accentColor:'#e2b32c',
-  crest:'',crest2:'',signature:'',seal:'',building:'',cardCfg:{},tagFields:{mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''},years:[y],currentYear:y,classes:{[y]:[]}};
+  crest:'',crest2:'',signature:'',seal:'',building:'',cardCfg:{},tagFields:{mat:0,lieu:0,classe:1,sexe:0,ecole:0,extra:''},years:[y],currentYear:y,classes:{[y]:[]}};
 }
 /* Nettoie un établissement venant d'une ancienne version ou d'une sauvegarde */
 const SCHOOL_TYPES={LYCEE:{label:'Lycée (général, classique, bilingue)',m:'Le Proviseur',f:'La Proviseure'},LYCEE_TECH:{label:'Lycée technique / professionnel',m:'Le Proviseur',f:'La Proviseure'},CES:{label:'CES — Collège d’enseignement secondaire',m:'Le Directeur',f:'La Directrice'},CETIC:{label:'CETIC — Collège d’enseignement technique',m:'Le Directeur',f:'La Directrice'},COLLEGE_PRIVE:{label:'Collège privé / institut',m:'Le Directeur',f:'La Directrice'},PRINCIPAL:{label:'Établissement dirigé par un Principal',m:'Le Principal',f:'La Principale'},AUTRE:{label:'Autre (fonction saisie à la main)',m:'',f:''}};
-function cleanTagFields(o){o=o&&typeof o==='object'?o:{};return{mat:o.mat===0||o.mat===false?0:1,lieu:o.lieu?1:0,classe:o.classe?1:0,sexe:o.sexe?1:0,ecole:o.ecole?1:0,extra:String(o.extra||'').slice(0,60)}}
+function cleanTagFields(o){o=o&&typeof o==='object'?o:{};return{mat:o.mat?1:0,lieu:o.lieu?1:0,classe:o.classe===0||o.classe===false?0:1,sexe:o.sexe?1:0,ecole:o.ecole?1:0,extra:String(o.extra||'').slice(0,60)}}
 function cleanCardCfg(c,years){
  const out={};if(!c||typeof c!=='object')return out;
  for(const y of years){const m=c[y];if(!m||typeof m!=='object')continue;out[y]={};
   for(const [k,v] of Object.entries(m)){const key=String(k).slice(0,40);
-   if(v==='tag'||v==='simple')out[y][key]='tag'}}
+   if(v==='tag'||v==='simple')out[y][key]='tag';else if(v==='tagPB'||v==='tagBAC')out[y][key]=v}}
  return out;
 }
 function cleanSchool(o,legacyYear){
@@ -1033,13 +1049,13 @@ function renderDashboard(){
 
 /* ---------- classes ---------- */
 function renderClasses(){
- const tf=Object.assign({mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''},school.tagFields||{});
+ const tf=Object.assign({mat:0,lieu:0,classe:1,sexe:0,ecole:0,extra:''},school.tagFields||{});
  document.querySelectorAll('[data-tf]').forEach(i=>i.checked=!!tf[i.dataset.tf]);if($('tfExtra')&&document.activeElement!==$('tfExtra'))$('tfExtra').value=tf.extra||'';
  const cl=classList();
  $('classesList').innerHTML=cl.length?cl.map(c=>{
-  const n=students.filter(s=>s.classe===c).length,mode=cardMode(c);
+  const n=students.filter(s=>s.classe===c).length,mode=cardMode(c),raw=(school.cardCfg&&school.cardCfg[year]&&school.cardCfg[year][c])||'full';
   return `<div class="roster-row" style="grid-template-columns:minmax(0,1fr) auto"><div style="min-width:0"><div class="roster-name">${esc(c)}</div><div class="roster-meta">${n} élève(s)</div>
-   <div style="margin-top:8px"><div class="hint" style="margin-bottom:3px">Rendu pour cette classe</div><select data-cfgmode data-name="${esc(c)}"><option value="full"${mode==='full'?' selected':''}>Carte scolaire complète</option><option value="tag"${mode==='tag'?' selected':''}>Carte OBC — photo avec date de naissance en haut et nom en bas</option></select></div></div>
+   <div style="margin-top:8px"><div class="hint" style="margin-bottom:3px">Rendu pour cette classe</div><select data-cfgmode data-name="${esc(c)}"><option value="full"${raw==='full'?' selected':''}>Carte scolaire complète</option><option value="tagPB"${raw==='tagPB'?' selected':''}>Carte OBC — Probatoire (PB), classes de Première</option><option value="tagBAC"${raw==='tagBAC'?' selected':''}>Carte OBC — BAC, classes de Terminale</option><option value="tag"${raw==='tag'?' selected':''}>Carte OBC — sans mention d’examen</option></select></div></div>
    <div class="row-actions"><button class="secondary" data-cls="rename" data-name="${esc(c)}">Renommer</button><button class="danger" data-cls="del" data-name="${esc(c)}">Supprimer</button></div></div>`}).join(''):'<div class="empty">Aucune classe. Ajoutez-en une ou importez une liste d’élèves.</div>';
 }
 $('btnAddClass').onclick=async()=>{
@@ -1063,14 +1079,14 @@ $('classesList').addEventListener('click',async e=>{
 });
 
 $('tagBox').addEventListener('change',async e=>{
- const t=e.target;school.tagFields=Object.assign({mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''},school.tagFields||{});
+ const t=e.target;school.tagFields=Object.assign({mat:0,lieu:0,classe:1,sexe:0,ecole:0,extra:''},school.tagFields||{});
  if(t.dataset.tf)school.tagFields[t.dataset.tf]=t.checked?1:0;else if(t.id==='tfExtra')school.tagFields.extra=t.value.trim().slice(0,60);else return;
  await saveSchool_();toast('Contenu des photos mis à jour.');
 });
 $('classesList').addEventListener('change',async e=>{
  const t=e.target,name=t.dataset.name;if(!name||!t.matches('[data-cfgmode]'))return;
  school.cardCfg=school.cardCfg||{};school.cardCfg[year]=school.cardCfg[year]||{};
- if(t.value==='tag')school.cardCfg[year][name]='tag';else delete school.cardCfg[year][name];
+ if(/^tag/.test(t.value))school.cardCfg[year][name]=t.value;else delete school.cardCfg[year][name];
  await saveSchool_();renderClasses();toast('Rendu mis à jour pour « '+name+' ».');
 });
 /* ---------- élèves ---------- */
@@ -1282,7 +1298,8 @@ $('btnExportPhotos').onclick=async()=>{
   files.push({name:`${(s.classe||'classe').replace(/[^A-Za-z0-9_\-]+/g,'_')}/${base}.jpg`,data:new Uint8Array(await p.card.arrayBuffer())})}
  download(zipBlob(files),`photos_${(school.schoolName||'ecole').replace(/[^A-Za-z0-9]+/g,'_')}_${year.replace('/','-')}.zip`);
 };
-function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+function download(blob,name){if(window.__scShare){window.__scShare=false;try{const f=new File([blob],name,{type:blob.type||'application/zip'});if(navigator.canShare&&navigator.canShare({files:[f]})){navigator.share({files:[f],title:name}).catch(()=>_dl(blob,name));return}}catch(e){}}_dl(blob,name)}
+function _dl(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
 
 /* ---------- caméra (fenêtre commune) ---------- */
 const Cam={stream:null,facing:isMobile?'environment':'user',ctx:null,draft:null,busy:false};
@@ -1515,16 +1532,18 @@ const IC={
 function pngRatio(u){try{if(!/^data:image\/png;base64,/.test(u||''))return 1;const b=atob(u.slice(22,66)),g=i=>b.charCodeAt(i),w=(g(16)<<24)|(g(17)<<16)|(g(18)<<8)|g(19),h=(g(20)<<24)|(g(21)<<16)|(g(22)<<8)|g(23);return h?w/h:1}catch(e){return 1}}
 function qrText(s){const enc=new TextEncoder(),mk=t=>`SCP|${s.matricule||''}|${t}|${year}`;let nom=String(s.nom||'');while(enc.encode(mk(nom)).length>80&&nom.length>3)nom=nom.slice(0,-1);return mk(nom)}
 const CARD_FULL={dob:1,lieu:1,sexe:1,mat:1,cls:1,code:0};
-function cardMode(classe){const v=school.cardCfg&&school.cardCfg[year]&&school.cardCfg[year][classe];return v==='tag'?'tag':'full'}
-const TAG_DEF={mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''};
+function cardMode(classe){const v=school.cardCfg&&school.cardCfg[year]&&school.cardCfg[year][classe];return /^tag/.test(v||'')?'tag':'full'}
+function examOf(classe){const v=school.cardCfg&&school.cardCfg[year]&&school.cardCfg[year][classe];return v==='tagPB'?'PB':v==='tagBAC'?'BAC':''}
+const TAG_DEF={mat:0,lieu:0,classe:1,sexe:0,ecole:0,extra:''};
 function tagLines(s){
- const f=Object.assign({},TAG_DEF,school.tagFields||{}),L=[String(s.nom||'')];
+ const f=Object.assign({},TAG_DEF,school.tagFields||{}),L=[String(s.nom||'')],ex=examOf(s.classe);
+ const cl=(f.classe||ex)&&s.classe?String(s.classe).replace(/^\s*(premi[eè]re|1[eè]?re|terminale|tle|tl|term\.?)\s+/i,''):'';
+ const code=[ex,cl,String(f.extra||'')].filter(Boolean).join(' ');
+ if(code)L.push(code);
  if(f.mat)L.push(String(s.matricule||''));
  if(f.lieu&&s.birth)L.push('Né(e) à '+s.birth);
- if(f.classe&&s.classe)L.push(s.classe);
  if(f.sexe&&s.sexe)L.push(s.sexe);
  if(f.ecole&&school.schoolName)L.push(school.schoolName);
- if(f.extra)L.push(String(f.extra));
  return L.filter(x=>x!=='').slice(0,6);
 }
 function obcPhoto(photo,s){
@@ -1533,7 +1552,7 @@ function obcPhoto(photo,s){
 }
 function tagHTML(s,photoUrl){
  const photo=photoUrl?`<img src="${photoUrl}" alt="Photo de ${esc(s.nom)}">`:SILHOUETTE,L=tagLines(s),bh=(L.length*3.5+2.2).toFixed(1);
- return `<article class="ptag"><div class="ph">${photo}<div class="dt">${s.dob?esc(dateFr(s.dob)):''}</div></div><div class="bd" style="height:${bh}mm">${L.map((t,i)=>`<b class="fit" data-fs="${i<2?8:6.5}">${esc(t)}</b>`).join('')}</div></article>`;
+ return `<article class="ptag"><div class="ph">${photo}<div class="dt">${s.dob?esc(dateFr(s.dob)):''}</div></div><div class="bd" style="height:${bh}mm">${L.map((t,i)=>`<b class="fit" data-fs="${i===0?7.6:i===1?8.4:6.5}">${esc(t)}</b>`).join('')}</div></article>`;
 }
 async function tagBlob(s,blob){
  const L=tagLines(s),W=700,LH=68,BH=L.length*LH+40,PH=795,cv=document.createElement('canvas');cv.width=W;cv.height=PH+BH;const g=cv.getContext('2d');
@@ -1724,7 +1743,7 @@ $('btnTagZip').onclick=async()=>{
    const p=await dbGet('photos',s.id);if(!(p&&p.card instanceof Blob))continue;
    const jb=await tagBlob(s,p.card);
    let base=(s.matricule||s.nom).replace(/[^A-Za-z0-9À-ÿ_-]+/g,'_')+'_'+s.nom.replace(/[^A-Za-z0-9À-ÿ]+/g,'_');base=base.slice(0,80);let n=base,i=2;while(used.has(n))n=base+'_'+i++;used.add(n);
-   files.push({name:n+'.jpg',data:new Uint8Array(await jb.arrayBuffer())});
+   files.push({name:String(s.classe||'Sans_classe').replace(/[\\/:*?"<>|]+/g,'-').trim().slice(0,40)+'/'+n+'.jpg',data:new Uint8Array(await jb.arrayBuffer())});
   }
   if(!files.length)return toast('Aucune photo exploitable.','err');
   download(zipBlob(files),`photos_ecrites_${year.replace('/','-')}.zip`);toast(`${files.length} photo(s) avec écriture exportée(s).`);
@@ -1839,6 +1858,9 @@ window.addEventListener('unhandledrejection',e=>toast('Erreur : '+(e.reason?.mes
  if(!schools.length){const s=defaultSchool('Mon établissement');await dbPut('schools',s);schools=[s]}
  await loadTenant();
 })();
+</script>
+<script>
+document.getElementById('btnBackupShare').onclick=function(){window.__scShare=true;exportBackup('all')};
 </script>
 </body>
 </html>
