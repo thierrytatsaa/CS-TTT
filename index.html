@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SchoolCard Pro</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#10243e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SchoolCard">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<style>
+:root{--navy:#10243e;--blue:#1767a5;--gold:#d5a63b;--line:#e1e7ef;--muted:#718096;--ink:#17283d}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0;font:14px/1.45 Inter,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:linear-gradient(180deg,#eef3f8 0,#f7f9fc 260px)}
+body.noscroll{overflow:hidden}
+.top{padding:20px max(16px,calc((100% - 1220px)/2));background:linear-gradient(115deg,#0c2038,#153e64 62%,#1c5a83);color:#fff;box-shadow:0 5px 22px #10243e24}
+.top-inner{max-width:1220px;margin:auto;display:flex;align-items:center;gap:14px}
+.brand-mark{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#f0cc76,#c28b24);display:grid;place-items:center;color:var(--navy);font-weight:900;font-size:16px}
+.brand-copy{flex:1;min-width:0}.eyebrow{font-size:10px;letter-spacing:1.3px;font-weight:800;color:#b68b36;margin-bottom:4px}
+.top h1{margin:0;font-size:24px;letter-spacing:-.5px}.top h1 span{color:#e7bd62}.top p{margin:4px 0 0;font-size:12px;color:#d0deea}
+.top-status{font-size:11px;border:1px solid #ffffff35;padding:7px 11px;border-radius:30px;white-space:nowrap}
+.wrap{max-width:1220px;margin:20px auto 48px;padding:0 14px}
+.tenant-bar,.panel{background:#fff;border:1px solid #e2e8f0;border-radius:16px;box-shadow:0 12px 32px rgba(16,36,62,.07)}
+.tenant-bar{padding:16px 18px;margin-bottom:14px}
+.tenant-bar .grid{grid-template-columns:2fr 1fr;align-items:end}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin:0 0 14px;padding:6px;background:#e8eef5;border-radius:13px;scrollbar-width:thin}
+.tab{border:0;background:transparent;padding:10px 14px;border-radius:9px;color:#52647a;font-size:12px;white-space:nowrap;box-shadow:none}
+.tab:hover{background:#fff}.tab.active{background:#fff;color:#125b91;box-shadow:0 2px 8px #10243e15}
+.panel{display:none;padding:22px}.panel.active{display:block}
+.section-heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;padding-bottom:14px;border-bottom:1px solid #edf1f5}
+.section-heading h2{font-size:20px;margin:0;color:#142b45}.section-subtitle{font-size:12px;color:#7b8999;margin:4px 0 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}
+label{font-size:12px;font-weight:700;color:#3d5065}
+input,select,textarea{width:100%;padding:10px 12px;border:1px solid #d5dee8;border-radius:9px;font:inherit;background:#fff;color:#20344a;outline:none}
+input:focus,select:focus{border-color:#4389bc;box-shadow:0 0 0 3px #2c7db51c}
+input[type=checkbox]{width:auto;transform:scale(1.15)}input[type=color]{padding:3px;height:40px}
+button,.btn{border:0;border-radius:9px;padding:10px 15px;background:linear-gradient(135deg,#176ba8,#145786);color:#fff;font:700 12px Arial,sans-serif;cursor:pointer;display:inline-block;text-align:center}
+button:hover,.btn:hover{filter:brightness(1.07)}button:disabled{opacity:.45;cursor:not-allowed}
+button.secondary,.btn.secondary{background:#edf2f7;color:#31465d;border:1px solid #e1e7ee}
+button.danger{background:#fff0ef;color:#b42318;border:1px solid #f3d0cc}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:15px}
+.hint{font-size:11px;color:var(--muted)}
+.notice{padding:11px 13px;border-radius:10px;background:#fff8e9;border:1px solid #f1dfb6;color:#79571a;font-size:12px;line-height:1.55;margin:12px 0}
+.notice.ok{background:#effaf3;border-color:#c8ead4;color:#23613a}.notice.bad{background:#fff0ef;border-color:#f3d0cc;color:#8a1f15}
+.stats{display:flex;gap:12px;flex-wrap:wrap;margin:14px 0}
+.stat{flex:1;min-width:130px;background:linear-gradient(145deg,#f8fbfe,#eef4f9);border:1px solid #e1eaf2;border-radius:13px;padding:14px 16px;color:#607286;font-size:11px;font-weight:600}
+.stat strong{display:block;font-size:26px;color:#153d61;letter-spacing:-.8px}
+.tablebox{overflow:auto;margin-top:14px;border:1px solid #e3eaf1;border-radius:12px}
+table{border-collapse:collapse;width:100%;min-width:560px}
+th,td{padding:9px 10px;border-bottom:1px solid #e8edf2;text-align:left;font-size:12px}
+th{background:#f5f8fb;color:#52667c;font-size:10px;text-transform:uppercase;letter-spacing:.5px}
+.empty{text-align:center;padding:28px;color:#8492a2}
+.roster-list{display:grid;gap:8px;margin-top:14px}
+.roster-row{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:11px;align-items:center;padding:9px;border:1px solid #e3eaf1;border-radius:12px;background:#fff}
+.roster-thumb{width:44px;height:52px;object-fit:cover;border-radius:7px;background:#edf2f7;border:1px solid #dce5ed}
+.roster-name{font-weight:800;color:#20364d;word-break:break-word}.roster-meta{font-size:11px;color:#77879a;margin-top:2px}
+.row-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.row-actions button{padding:9px 11px}
+.badge{display:inline-block;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:#eaf3fb;color:#1767a5;margin-left:4px}
+.badge.ok{background:#e6f6ec;color:#1d7a43}.badge.warn{background:#fff3dc;color:#9a6200}.badge.err{background:#fde8e6;color:#b42318}
+.review-row{display:grid;grid-template-columns:1fr 1.2fr auto;gap:10px;align-items:center;padding:9px;border:1px solid #f1dfb6;background:#fffdf5;border-radius:10px;margin-top:8px}
+.logo-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.logo-box{border:1px solid #e3eaf1;border-radius:12px;padding:12px;background:#f9fbfd}
+.logo-box img{display:block;max-height:60px;max-width:100%;margin:8px 0;object-fit:contain}
+.toast{position:fixed;left:50%;bottom:18px;transform:translate(-50%,30px);background:#123;color:#fff;padding:11px 16px;border-radius:12px;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:100;max-width:92vw;text-align:center}
+.toast.show{opacity:1;transform:translate(-50%,0)}.toast.err{background:#b42318}.toast.ok{background:#176b3a}
+.modal{position:fixed;inset:0;background:#0b1624cc;z-index:50;display:flex;align-items:flex-start;justify-content:center;overflow:auto;padding:12px}
+.modal.cam{z-index:60}
+.modal-box{background:#fff;border-radius:16px;padding:18px;width:min(100%,640px);margin:auto}
+.modal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}
+.cam-stage{position:relative;margin:0 auto;background:#101820;border-radius:10px;overflow:hidden;width:100%}
+.cam-stage video{display:block;width:100%;height:auto}.cam-stage video.mirror{transform:scaleX(-1)}
+.cam-guide{position:absolute;border:2px dashed #ffd35c;box-shadow:0 0 0 9999px #0007;border-radius:6px;pointer-events:none}
+.cam-guide::after{content:"";position:absolute;left:50%;top:10%;width:46%;height:48%;transform:translateX(-50%);border:1.5px solid #ffffffaa;border-radius:50%}
+#camPreview{display:block;margin:0 auto;width:180px;height:210px;object-fit:cover;border:3px solid #d7e3ef;border-radius:12px}
+.photo-edit{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:14px}
+.photo-edit img{width:76px;height:92px;object-fit:cover;border-radius:8px;border:1px solid #d6e0e9;background:#eef2f6}
+.preview{margin-top:14px;display:flex;gap:16px;flex-wrap:wrap}
+/* ===== cartes : modèle drapeau + emblème + ruban rouge + QR (mise en page en mm, 96 × 64 mm de référence) ===== */
+.print-area{display:none}
+.print-area.measuring{display:block;position:absolute;left:-9999px;top:0;visibility:hidden}
+.print-page{width:calc(var(--cw,96mm)*2 + 6mm);margin:0 auto;display:grid;grid-template-columns:var(--cw,96mm) var(--cw,96mm);grid-auto-rows:var(--ch,64mm);gap:2mm 6mm;justify-content:center;align-content:start;break-after:page;page-break-after:always}
+.print-page:last-child{break-after:auto;page-break-after:auto}
+.school-card.pro-school-card{width:var(--cw,96mm);height:var(--ch,64mm);position:relative;overflow:hidden;background:#fff;border-radius:calc(3.2mm*var(--sc,1));box-shadow:0 0 0 .28mm #b9c6d4;isolation:isolate;break-inside:avoid;font-family:"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif}
+.no-outline .school-card.pro-school-card{box-shadow:none}
+.pc{position:absolute;left:0;top:0;width:calc(var(--cw,96mm)/var(--sc,1));height:64mm;transform:scale(var(--sc,1));transform-origin:0 0;overflow:hidden;color:#10233b;background:linear-gradient(180deg,#f8fbff 0,#eaf3fc 55%,#dce8f5 100%)}
+.pc>*{position:absolute;box-sizing:border-box}
+.pc .fit{display:block;white-space:nowrap;overflow:hidden}
+.pc .wave{left:0;top:0;width:100%;height:100%;z-index:0}
+.pc .wm{right:3.2mm;top:28.5mm;width:27mm;height:25mm;object-fit:contain;opacity:.13;z-index:1}
+.pc .bld{right:0;top:13.9mm;width:27mm;height:12.5mm;object-fit:cover;z-index:1;-webkit-mask-image:linear-gradient(90deg,transparent,#000 42%);mask-image:linear-gradient(90deg,transparent,#000 42%)}
+.pc .hd{left:0;top:0;right:0;height:13.4mm;z-index:3;display:grid;grid-template-columns:1fr 15mm 1fr;column-gap:1.4mm;align-items:center;padding:0 3.4mm 0 15.5mm;background:linear-gradient(105deg,#06204a 0%,var(--card-primary,#0b2a5b) 48%,#06204a 100%);border-bottom:.5mm solid var(--card-accent,#e2b32c)}
+.pc .hd .tx{text-align:center;color:#fff;min-width:0}
+.pc .hd .tx b{font-weight:800;letter-spacing:.1pt}
+.pc .hd .tx i{display:block;font-style:italic;font-weight:700;color:#ffd84a;margin:.35mm 0 .5mm}
+.pc .hd .tx hr{border:0;height:.18mm;background:rgba(255,255,255,.42);margin:0 3mm .6mm}
+.pc .hd .tx span{display:block;font-size:4.6pt;line-height:1.2;font-weight:600;text-transform:uppercase}
+.pc .hd .cr{display:flex;align-items:center;justify-content:center;height:12.4mm}
+.pc .hd .cr img{max-width:14mm;max-height:12.4mm;object-fit:contain;filter:drop-shadow(0 .2mm .4mm rgba(0,0,0,.55))}
+.pc .flag{left:0;top:0;width:18mm;height:13.4mm;z-index:4}
+.pc .slogo{left:5.6mm;top:14.4mm;width:14.6mm;height:11.6mm;object-fit:contain;z-index:2;filter:drop-shadow(0 .25mm .35mm rgba(10,30,60,.25))}
+.pc .sname{left:21.5mm;right:9mm;top:14.5mm;height:5.6mm;z-index:2;text-align:center;font-weight:900;color:var(--card-primary,#0b2a5b);text-transform:uppercase;letter-spacing:.1pt;line-height:5.6mm}
+.pc .swoosh{left:28mm;top:19.9mm;width:42mm;height:2mm;z-index:2}
+.pc .rbw{left:20.2mm;right:15.8mm;top:22.3mm;height:4.4mm;z-index:3}
+.pc .rb{position:absolute;left:3mm;right:3mm;top:0;bottom:0;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:7.6pt;letter-spacing:.25pt;background:linear-gradient(180deg,#bb2133 0,#8b1124 100%);clip-path:polygon(1.6mm 0,100% 0,calc(100% - 1.6mm) 100%,0 100%);text-shadow:0 .15mm .2mm rgba(0,0,0,.35);white-space:nowrap}
+.pc .rbw i{position:absolute;top:0;bottom:0;width:.55mm;background:var(--card-accent,#e2b32c);transform:skewX(-20deg)}
+.pc .rbw i:nth-child(1){left:.4mm}.pc .rbw i:nth-child(2){left:1.5mm}.pc .rbw i:nth-child(3){right:1.5mm}.pc .rbw i:nth-child(4){right:.4mm}
+.pc .ph{left:4.9mm;top:27.5mm;width:19.1mm;height:22.2mm;border-radius:1.9mm;overflow:hidden;background:#dfe8f1;z-index:2;box-shadow:0 0 0 .5mm #fff,0 0 0 1mm #1b5ea8,0 .8mm 1.8mm 1mm rgba(10,30,60,.2)}
+.pc .ph img,.pc .ph svg{display:block;width:100%;height:100%;object-fit:cover;object-position:center 18%}
+.pc .fl{left:27.2mm;right:4mm;top:27.6mm;height:23.6mm;z-index:2;display:flex;flex-direction:column;justify-content:space-between}
+.pc .fr{display:grid;grid-template-columns:20.6mm 1fr;column-gap:1.4mm;align-items:center;height:4.1mm}
+.pc .lb{height:100%;display:flex;align-items:center;gap:.9mm;padding:0 1.1mm;background:linear-gradient(90deg,rgba(196,214,234,.95),rgba(222,234,246,.75));border-radius:1.2mm;font-size:5.2pt;color:#1d3047;font-weight:600;white-space:nowrap;overflow:hidden}
+.pc .lb svg{width:2.7mm;height:2.7mm;flex:none;fill:#14407a}
+.pc .lb svg.st{fill:none;stroke:#14407a;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.pc .vl{font-size:6.7pt;font-weight:800;color:#0c1a2c;min-width:0;line-height:4.1mm}
+.pc .vl .nm{text-transform:uppercase}
+.pc .vl i{font-weight:500;color:#33465e;margin:0 .6mm}
+.pc .vl .cls{display:inline-block;background:linear-gradient(180deg,#1d70c4,#0a4a94);color:#fff;border-radius:1.5mm;padding:0 3.4mm;min-width:21mm;text-align:center;line-height:3.9mm;box-shadow:inset 0 -.3mm 0 rgba(0,0,0,.2),0 .2mm .5mm rgba(10,40,90,.3);white-space:nowrap}
+.pc .yb{left:0;top:50.7mm;width:15.4mm;height:13.3mm;background:linear-gradient(90deg,#06204a,#0a346f);z-index:2;border-top-right-radius:2.4mm}
+.pc .yg{left:0;top:52.6mm;width:45.6mm;height:7.8mm;background:var(--card-accent,#e2b32c);clip-path:polygon(0 0,calc(100% - 2.4mm) 0,100% 100%,0 100%);z-index:2}
+.pc .yr{left:0;top:52.6mm;width:44.4mm;height:7.8mm;background:linear-gradient(90deg,#06204a,#0b3b7d);clip-path:polygon(0 0,calc(100% - 2.4mm) 0,100% 100%,0 100%);z-index:2;display:flex;align-items:center;gap:1.4mm;padding-left:17.2mm;color:#fff}
+.pc.noqr .yb{display:none}.pc.noqr .yr{padding-left:5mm}
+.pc .yr svg{width:5.2mm;height:5.2mm;fill:#ffd84a;flex:none}
+.pc .yr .t1{display:block;font-size:5.4pt;font-style:italic;line-height:1.1}
+.pc .yr .t2{display:block;font-size:8pt;font-weight:800;line-height:1.05;letter-spacing:.2pt}
+.pc .qr{left:4.6mm;top:51.5mm;width:9.8mm;height:9.8mm;padding:.7mm;background:#fff;border-radius:1.3mm;z-index:3;box-shadow:0 .3mm .9mm rgba(0,0,0,.35)}
+.pc .qr svg{display:block;width:100%;height:100%}
+.pc .dv{left:calc(50% + 4mm);top:52mm;width:.22mm;height:9.4mm;background:#2a4a78;z-index:2;opacity:.8}
+.pc .sg{left:calc(50% + 6mm);right:18.8mm;top:51.5mm;text-align:center;z-index:2}
+.pc.combo .sg{right:4mm}
+.pc .sg .d{font-size:5.8pt;font-style:italic;color:#1d2c40;line-height:1.25}
+.pc .sg .t{font-size:6.6pt;font-style:italic;font-weight:800;color:#0a1b33;line-height:1.25}
+.pc .sig{left:calc(50% + 4.5mm);top:55.6mm;width:20mm;height:7.2mm;object-fit:contain;object-position:left center;z-index:3;mix-blend-mode:multiply}
+.pc .sl{left:61.1mm;top:55mm;width:9mm;height:9mm;object-fit:contain;object-position:center;z-index:3;mix-blend-mode:multiply}
+.pc .sl.combo{left:52mm;width:27mm;height:7.4mm;top:55.8mm}
+.pc.back .hd2{left:0;top:0;right:0;height:11mm;z-index:3;display:flex;align-items:center;padding:0 4mm 0 16.5mm;background:linear-gradient(105deg,#06204a,var(--card-primary,#0b2a5b) 50%,#06204a);border-bottom:.5mm solid var(--card-accent,#e2b32c);color:#fff;font-weight:900;text-transform:uppercase}
+.pc.back .hd2 .fit{width:100%;text-align:center}
+.pc.back .bk{left:6mm;right:6mm;top:13.4mm;bottom:12mm;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.3mm;text-align:center;font-size:6.3pt;line-height:1.3;color:#2b3f58}
+.pc.back .bk img{height:10mm;max-width:20mm;object-fit:contain}
+.pc.back .bk .warn{font-weight:800;color:#a8182b}
+.pc.back .sgn{left:6mm;right:6mm;bottom:3.6mm;height:6.4mm;z-index:2;border-top:.2mm solid #7b8da3;font-size:5pt;color:#53667c;padding-top:.6mm;display:flex;justify-content:space-between}
+.print-page.tags{width:calc(40mm*4 + 12mm);grid-template-columns:repeat(4,40mm);grid-auto-rows:56mm;gap:3mm 4mm}
+.ptag{width:40mm;height:56mm;display:flex;flex-direction:column;background:#fff;color:#000;overflow:hidden;font-family:Arial,Helvetica,sans-serif;box-shadow:0 0 0 .2mm #c9ced6}
+.ptag .ph{position:relative;flex:1;min-height:0;background:#e6ebf2}
+.ptag .ph img,.ptag .ph svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.ptag .dt{position:absolute;top:1.3mm;left:0;right:0;text-align:center;font-weight:800;font-size:10pt;line-height:1.1;text-shadow:0 0 1.2mm #fff,0 0 .6mm #fff}
+.ptag .bd{height:11mm;display:flex;flex-direction:column;justify-content:center;gap:.4mm;padding:0 1.2mm;text-align:center;flex:none}
+.ptag .bd b{display:block;white-space:nowrap;overflow:hidden;font-weight:800;text-transform:uppercase;line-height:1.15}
+
+.pc .ph.obc{background:#fff}
+.pc .ph.obc .op{position:absolute;left:0;right:0;top:0;overflow:hidden;background:#dfe8f1}
+.pc .ph.obc .op img,.pc .ph.obc .op svg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.pc .ph.obc .dt{position:absolute;top:.5mm;left:0;right:0;text-align:center;font:800 5pt/1.1 Arial,Helvetica,sans-serif;color:#000;text-shadow:0 0 .6mm #fff,0 0 .3mm #fff}
+.pc .ph.obc .bd{position:absolute;left:0;right:0;bottom:0;background:#fff;display:flex;flex-direction:column;justify-content:center;padding:0 .5mm;text-align:center;font-family:Arial,Helvetica,sans-serif;color:#000}
+.pc .ph.obc .bd b{display:block;white-space:nowrap;overflow:hidden;font-weight:800;text-transform:uppercase;line-height:1.2}
+
+#previewCard{overflow:auto;max-width:100%}
+.qrow{margin:6px 0;padding:8px 10px;border-radius:9px;font-size:12px;font-weight:600;background:#fff8e9;color:#79571a;border:1px solid #f1dfb6}.qrow.ok{background:#effaf3;color:#23613a;border-color:#c8ead4}.qrow.bad{background:#fff0ef;color:#8a1f15;border-color:#f3d0cc}
+@page{size:A4 portrait;margin:5mm}
+@media print{
+ body{background:#fff;margin:0}
+ .top,.wrap,.modal,.toast{display:none!important}
+ .print-area{display:block!important}
+ *{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+}
+@media(max-width:760px){
+ .top{padding:14px}.top h1{font-size:20px}.top-status{display:none}.brand-mark{width:40px;height:40px}
+ .wrap{padding:0 8px;margin-top:12px}.panel{padding:14px}.tenant-bar{padding:12px}
+ .grid,.tenant-bar .grid,.logo-grid{grid-template-columns:1fr}
+ .section-heading h2{font-size:17px}.stat{min-width:calc(50% - 8px)}.stat strong{font-size:22px}
+ .review-row{grid-template-columns:1fr}.actions button,.actions .btn{flex:1}
+ .roster-row{grid-template-columns:42px minmax(0,1fr)}.row-actions{grid-column:1/-1;justify-content:stretch}.row-actions button{flex:1}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-inner"><div class="brand-mark">SC</div><div class="brand-copy"><div class="eyebrow">PLATEFORME MULTI-ÉTABLISSEMENTS · V10</div><h1>SchoolCard <span>Pro</span></h1><p>Élèves, photos et cartes scolaires — fonctionne hors connexion</p></div><div class="top-status" id="persistStatus"><span style="display:inline-block;width:7px;height:7px;background:#64d69b;border-radius:50%;margin-right:6px"></span>Données locales</div></div></header>
+
+<div class="wrap">
+<div class="tenant-bar">
+ <div class="grid">
+  <div class="field"><label for="schoolSelect">Établissement actif</label><select id="schoolSelect"></select></div>
+  <div class="field"><label for="yearSelect">Année scolaire</label><select id="yearSelect"></select></div>
+ </div>
+ <div class="actions" style="margin-top:12px">
+  <button id="btnNewSchool">+ Établissement</button><button class="secondary" id="btnRenameSchool">Renommer</button><button class="secondary" id="btnNewYear">+ Nouvelle année</button><button class="danger" id="btnDeleteSchool">Supprimer</button>
+ </div>
+ <div class="hint" style="margin-top:8px">Les élèves, photos et réglages affichés appartiennent uniquement à l'établissement et à l'année sélectionnés.</div>
+</div>
+
+<div class="tabs" id="tabs">
+ <button class="tab active" data-tab="dashboard">Tableau de bord</button>
+ <button class="tab" data-tab="school">Établissement</button>
+ <button class="tab" data-tab="classes">Classes</button>
+ <button class="tab" data-tab="students">Élèves</button>
+ <button class="tab" data-tab="photos">Photos</button>
+ <button class="tab" data-tab="roster">Photos par classe</button>
+ <button class="tab" data-tab="print">Impression</button>
+</div>
+
+<!-- TABLEAU DE BORD -->
+<section class="panel active" id="dashboard">
+ <div class="section-heading"><div><div class="eyebrow">VUE D'ENSEMBLE</div><h2>Tableau de bord</h2><p class="section-subtitle" id="dashSub"></p></div></div>
+ <div id="backupAlert"></div>
+ <div class="stats">
+  <div class="stat"><strong id="stStudents">0</strong>Élèves</div>
+  <div class="stat"><strong id="stClasses">0</strong>Classes</div>
+  <div class="stat"><strong id="stPhotos">0</strong>Photos</div>
+  <div class="stat"><strong id="stMissing">0</strong>Photos manquantes</div>
+  <div class="stat"><strong id="stPrinted">0</strong>Cartes imprimées</div>
+ </div>
+ <div class="tablebox"><table><thead><tr><th>Classe</th><th>Effectif</th><th>Garçons</th><th>Filles</th><th>Avec photo</th><th>Sans photo</th><th>Imprimées</th></tr></thead><tbody id="dashClasses"></tbody></table></div>
+ <h3 style="margin:22px 0 4px">Sauvegarde</h3>
+ <p class="hint">La sauvegarde (fichier .zip) contient les établissements, élèves et photos. Gardez-en une copie sur une clé USB ou dans le cloud.</p>
+ <div class="actions">
+  <button id="btnBackupAll">Sauvegarder tout</button>
+  <button class="secondary" id="btnBackupCurrent">Sauvegarder cet établissement</button>
+  <label class="btn secondary">Restaurer une sauvegarde<input type="file" id="restoreFile" accept=".zip,.json,application/zip,application/json" hidden></label>
+ </div>
+ <label style="display:flex;gap:8px;align-items:center;margin-top:10px;font-weight:600"><input type="checkbox" id="bkOriginals"> Inclure aussi les photos originales (fichier plus volumineux)</label>
+ <div class="notice" id="storageInfo" style="margin-top:16px"></div>
+ <div class="notice ok"><b>Sur smartphone :</b> si la caméra intégrée est refusée (fichier ouvert hors HTTPS), utilisez le bouton « Appareil photo du téléphone » dans la fenêtre de prise de photo : il ouvre l'application photo native et fonctionne partout.</div>
+</section>
+
+<!-- ÉTABLISSEMENT -->
+<section class="panel" id="school">
+ <div class="section-heading"><div><div class="eyebrow">IDENTITÉ & PARAMÈTRES</div><h2>Informations de l'établissement</h2><p class="section-subtitle">Ces informations apparaissent sur les cartes.</p></div></div>
+ <div class="grid">
+  <div class="field full"><label for="fName">Nom de l'établissement</label><input id="fName" placeholder="Ex. Lycée technique de Kyé-Ossi"></div>
+  <div class="field"><label for="fTutelle">Ministère de tutelle</label><select id="fTutelle"></select></div>
+  <div class="field"><label for="fMinistry">Intitulé du ministère (français)</label><input id="fMinistry"></div>
+  <div class="field"><label for="fMinistryEn">Intitulé du ministère (anglais)</label><input id="fMinistryEn"></div>
+  <div class="field"><label for="fMottoFr">Devise (français)</label><input id="fMottoFr"></div>
+  <div class="field"><label for="fMottoEn">Devise (anglais)</label><input id="fMottoEn"></div>
+  <div class="field"><label for="fTown">Ville / lieu de délivrance</label><input id="fTown"></div>
+  <div class="field"><label for="fAddress">Adresse (verso)</label><input id="fAddress" placeholder="BP 123 Kyé-Ossi"></div>
+  <div class="field"><label for="fPhone">Téléphone (verso)</label><input id="fPhone" inputmode="tel"></div>
+  <div class="field"><label for="fType">Type d’établissement</label><select id="fType"></select></div><div class="field"><label for="fSigSex">Chef d’établissement</label><select id="fSigSex"><option value="m">Homme (Le Proviseur / Le Directeur)</option><option value="f">Femme (La Proviseure / La Directrice)</option></select></div><div class="field"><label for="fSignatory">Fonction écrite sur la carte (modifiable)</label><input id="fSignatory"></div>
+  <div class="field"><label for="fIssueDate">Date de délivrance</label><input id="fIssueDate" type="date"></div>
+  <div class="field"><label for="fPrimary">Couleur principale</label><input id="fPrimary" type="color"></div>
+  <div class="field"><label for="fAccent">Couleur d'accent</label><input id="fAccent" type="color"></div>
+ </div>
+ <h3 style="margin:22px 0 8px">Logos, signature et cachet</h3>
+ <div class="logo-grid" id="logoFields"></div>
+ <p class="hint">Utilisez uniquement une signature et un cachet réels autorisés par l'établissement. Les images sont réduites automatiquement.</p>
+ <div class="actions"><button id="btnSaveSchool">Enregistrer les paramètres</button></div>
+</section>
+
+<!-- CLASSES -->
+<section class="panel" id="classes">
+ <div class="section-heading"><div><div class="eyebrow">ORGANISATION</div><h2>Classes</h2><p class="section-subtitle">Classes de l'année sélectionnée. Aucune nomenclature imposée.</p></div></div>
+ <div class="grid"><div class="field"><label for="newClassName">Nouvelle classe</label><input id="newClassName" placeholder="Ex. 6e A, Terminale D, Génie civil 1"></div><div class="field"><label>&nbsp;</label><button id="btnAddClass">+ Ajouter la classe</button></div></div>
+ <div class="card" id="tagBox" style="margin:12px 0;padding:12px;border:1px solid #d6dde8;border-radius:12px;background:#f7f9fc"><b>Cartes OBC — écriture sur la photo</b>
+  <div class="hint" style="margin:4px 0 8px">Pour les classes réglées sur « Carte OBC » : la carte scolaire est identique, mais la <b>photo</b> porte la <b>date de naissance</b> en haut et le <b>nom et prénom</b> en bas. Cochez les petites informations à ajouter sous le nom (4 lignes maximum sur la carte).</div>
+  <div style="display:grid;gap:6px;grid-template-columns:repeat(auto-fit,minmax(190px,1fr))">
+   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="mat"> Code / matricule de l’élève</label>
+   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="lieu"> Lieu de naissance</label>
+   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="classe"> Classe</label>
+   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="sexe"> Sexe</label>
+   <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" data-tf="ecole"> Nom de l’établissement</label></div>
+  <div class="field" style="margin-top:8px"><label for="tfExtra">Texte libre (ex. centre d’examen, série) — identique pour tous</label><input id="tfExtra" maxlength="60" placeholder="Ex. Centre : 123 — Série : D"></div></div>
+ <div class="roster-list" id="classesList"></div>
+</section>
+
+<!-- ÉLÈVES -->
+<section class="panel" id="students">
+ <div class="section-heading"><div><div class="eyebrow">BASE SCOLAIRE</div><h2>Élèves</h2><p class="section-subtitle">Saisie individuelle ou importation Excel / CSV avec contrôle avant validation.</p></div></div>
+ <div class="actions" style="margin-top:0"><button id="btnAddStudent">＋ Ajouter un élève</button><button class="secondary" id="btnTemplate">Télécharger le modèle (CSV)</button></div>
+ <div class="notice">Colonnes reconnues : <b>nom, prénom</b> (ou « nom et prénom »), <b>date de naissance, lieu de naissance, sexe, matricule, classe</b>. Les dates Excel et les formats JJ/MM/AAAA sont convertis automatiquement.</div>
+ <div class="grid"><div class="field full"><label for="excelFile">Importer une liste (.xlsx, .csv — .xls nécessite Internet)</label><input id="excelFile" type="file" accept=".xlsx,.xls,.csv,.txt"></div></div>
+ <div id="importPreview"></div>
+ <div class="grid" style="margin-top:16px">
+  <div class="field"><label for="classFilter">Classe</label><select id="classFilter"></select></div>
+  <div class="field"><label for="statusFilter">Statut</label><select id="statusFilter"><option value="">Tous</option><option value="nophoto">Sans photo</option><option value="photo">Avec photo</option><option value="toprint">À imprimer (photo, non imprimée)</option><option value="printed">Déjà imprimées</option></select></div>
+  <div class="field full"><label for="studentSearch">Rechercher</label><input id="studentSearch" placeholder="Nom ou matricule" type="search"></div>
+ </div>
+ <div class="hint" id="studentCount" style="margin-top:10px"></div>
+ <div class="roster-list" id="studentsList"></div>
+ <div class="actions"><button class="secondary" id="btnMoreStudents" hidden>Afficher plus</button></div>
+</section>
+
+<!-- PHOTOS -->
+<section class="panel" id="photos">
+ <div class="section-heading"><div><div class="eyebrow">PHOTOTHÈQUE</div><h2>Importer des photos</h2><p class="section-subtitle">Nommez les fichiers avec le matricule (idéal) ou le nom exact de l'élève.</p></div></div>
+ <div class="grid">
+  <div class="field full"><label for="photoFiles">Sélectionner plusieurs photos</label><input id="photoFiles" type="file" accept="image/*" multiple><span class="hint">Sur ordinateur : Ctrl+A dans le dossier. Sur téléphone : sélection multiple dans la galerie.</span></div>
+  <div class="field full"><label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="photoReplace"> Remplacer les photos déjà enregistrées</label></div>
+  <div class="field full"><label>Traitement des portraits</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="phEnh" checked> Amélioration « studio » : exposition, contraste, netteté, débruitage, lumière</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="phSmart" checked> Cadrage intelligent sur le visage</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="phBg"> Fond uniforme bleu clair <span class="hint">(expérimental — annulé automatiquement si le visage risque d’être abîmé)</span></label></div>
+ </div>
+ <div class="actions"><button id="btnImportPhotos">Importer et associer</button></div>
+ <div id="photoMessage" class="hint" style="margin-top:12px"></div>
+ <div id="photoReview"></div>
+ <h3 style="margin:24px 0 6px">Associer une photo à un élève</h3>
+ <div class="grid"><div class="field"><label for="onePhotoStudent">Élève</label><input id="onePhotoStudent" list="studentDatalist" placeholder="Tapez le nom ou le matricule"></div><div class="field"><label for="onePhoto">Photo</label><input id="onePhoto" type="file" accept="image/*"></div></div>
+ <div class="actions"><button class="secondary" id="btnAssignOne">Associer la photo</button></div>
+ <datalist id="studentDatalist"></datalist>
+ <h3 style="margin:24px 0 6px">Exporter les photos</h3>
+ <div class="actions" style="margin-top:6px"><button class="secondary" id="btnExportPhotos">Exporter les photos (ZIP, nommées par matricule)</button></div>
+</section>
+
+<!-- PHOTOS PAR CLASSE -->
+<section class="panel" id="roster">
+ <div class="section-heading"><div><div class="eyebrow">IDENTIFICATION VISUELLE</div><h2>Prise de photos par classe</h2><p class="section-subtitle">Choisissez une classe, puis photographiez chaque élève depuis sa ligne.</p></div></div>
+ <div class="grid"><div class="field"><label for="rosterClass">Classe</label><select id="rosterClass"></select></div><div class="field"><label for="rosterSearch">Rechercher</label><input id="rosterSearch" placeholder="Nom ou matricule" type="search"></div></div>
+ <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:600"><input type="checkbox" id="rosterAuto" checked> Passer automatiquement à l'élève suivant sans photo</label>
+ <div class="stats"><div class="stat"><strong id="rosterTotal">0</strong>Élèves</div><div class="stat"><strong id="rosterDone">0</strong>Photos</div><div class="stat"><strong id="rosterMissing">0</strong>Manquantes</div></div>
+ <div class="actions" style="margin-top:0"><button id="btnRosterStart">📷 Commencer au premier élève sans photo</button></div>
+ <div class="notice">Un cadre jaune guide le placement du visage. Après la capture, le portrait est recadré au format de la carte (sans déformation), éclairci légèrement, puis vous validez ou reprenez. L'original est conservé.</div>
+ <div class="roster-list" id="rosterList"></div>
+</section>
+
+<!-- IMPRESSION -->
+<section class="panel" id="print">
+ <div class="section-heading"><div><div class="eyebrow">ÉDITION & EXPORT</div><h2>Génération des cartes</h2><p class="section-subtitle">Aperçu, sélection et export PDF (A4, 10 cartes par page).</p></div></div>
+ <div class="grid">
+  <div class="field"><label for="printClass">Classe à imprimer</label><select id="printClass"></select></div>
+  <div class="field"><label for="sortOrder">Ordre</label><select id="sortOrder"><option value="name">Classe puis ordre alphabétique</option><option value="matricule">Matricule</option></select></div>
+  <div class="field"><label for="cardFormat">Format de carte</label><select id="cardFormat"><option value="ref32">96 × 64 mm — modèle (recommandé)</option><option value="cr80">85,6 × 54 mm — CR80 (carte PVC standard)</option><option value="96">96 × 54 mm — paysage 16:9</option></select></div>
+  <div class="field"><label>Options</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="includeNoPhoto" checked> Inclure les élèves sans photo</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="onlyUnprinted"> Seulement les cartes non encore imprimées</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="cutMarks" checked> Fin contour de découpe</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="printBack"> Ajouter les versos (recto-verso)</label>
+   <label style="display:flex;gap:8px;align-items:center;font-weight:600"><input type="checkbox" id="optQR" checked> QR code de vérification sur la carte</label>
+  </div>
+ </div>
+ <div class="stats"><div class="stat"><strong id="printCount">0</strong>Cartes</div><div class="stat"><strong id="printPages">0</strong>Pages A4</div><div class="stat"><strong id="printMissingCount">0</strong>Sans photo (classe)</div></div>
+ <div class="actions"><button id="btnPrint">Préparer les cartes → imprimer / PDF</button><button class="secondary" id="btnPreview">Aperçu d'une carte</button><button class="secondary" id="btnTagZip">Photos OBC seules (ZIP)</button><button class="secondary" id="btnMarkPrinted">Marquer la sélection comme imprimée</button></div>
+ <p class="hint">Dans la fenêtre d'impression : « Enregistrer au format PDF », A4, Portrait, échelle 100 %, graphiques d'arrière-plan activés. Pour le recto-verso : impression recto-verso, retournement sur le bord long. Faites toujours un essai papier avant le tirage complet.</p>
+ <div id="previewBox" hidden><h3>Aperçu</h3><div class="preview" id="previewCard"></div></div>
+</section>
+</div>
+
+<div class="print-area" id="printArea"></div>
+<div class="toast" id="toast" role="status"></div>
+
+<!-- Modal élève -->
+<div class="modal" id="studentModal" hidden><div class="modal-box">
+ <div class="modal-head"><strong id="studentFormTitle">Fiche élève</strong><button class="secondary" data-close="studentModal">✕</button></div>
+ <input type="hidden" id="editId">
+ <div class="grid">
+  <div class="field full"><label for="sName">Nom et prénom *</label><input id="sName" placeholder="Ex. NGUEMA Paul" autocomplete="off"></div>
+  <div class="field"><label for="sMatricule">Matricule</label><input id="sMatricule" autocomplete="off"></div>
+  <div class="field"><label for="sClass">Classe *</label><input id="sClass" list="classOptions" autocomplete="off"><datalist id="classOptions"></datalist></div>
+  <div class="field"><label for="sSex">Sexe *</label><select id="sSex"><option value="">— Choisir —</option><option>Masculin</option><option>Féminin</option></select></div>
+  <div class="field"><label for="sDob">Date de naissance</label><input id="sDob" type="date"></div>
+  <div class="field full"><label for="sBirth">Lieu de naissance</label><input id="sBirth" autocomplete="off"></div>
+ </div>
+ <div class="photo-edit"><img id="sPhotoImg" alt="" hidden><div><div class="actions" style="margin:0"><button class="secondary" id="btnFormCam" type="button">📷 Prendre la photo</button><label class="btn secondary">Choisir un fichier<input type="file" id="sPhotoFile" accept="image/*" hidden></label><button class="danger" id="btnFormPhotoRemove" type="button" hidden>Retirer</button></div><div class="hint" id="sPhotoHint" style="margin-top:6px">Photo facultative.</div></div></div>
+ <div class="actions"><button id="btnSaveStudent">Enregistrer la fiche</button><button class="secondary" data-close="studentModal">Annuler</button></div>
+ <p class="hint">* obligatoire. La fiche est enregistrée dans l'établissement et l'année sélectionnés.</p>
+</div></div>
+
+<!-- Modal caméra -->
+<div class="modal cam" id="camModal" hidden><div class="modal-box">
+ <div class="modal-head"><strong id="camTitle">Photo</strong><button class="secondary" id="camClose">✕</button></div>
+ <div class="cam-stage" id="camStage" hidden><video id="camVideo" playsinline muted autoplay></video><div class="cam-guide" id="camGuide"></div></div>
+ <div id="camPreviewBox" hidden style="text-align:center"><img id="camPreview" alt="Portrait recadré"><p class="hint" id="camMode" style="margin:8px 0 0;font-weight:700"></p><div id="camQ" style="text-align:left"></div><p class="hint">Vérifiez le cadrage, la luminosité et la netteté avant de valider.</p></div>
+ <div class="hint" id="camInfo" style="margin:10px 0"></div>
+ <div class="actions" id="camLive" style="margin-top:6px">
+  <button id="camShot">📸 Capturer</button><button class="secondary" id="camFlip">⇄ Changer de caméra</button>
+  <label class="btn secondary">📱 Appareil photo du téléphone<input type="file" id="camNative" accept="image/*" capture="environment" hidden></label>
+  <label class="btn secondary">🖼 Galerie<input type="file" id="camGallery" accept="image/*" hidden></label>
+  <label style="display:flex;gap:8px;align-items:center;width:100%;font-weight:600"><input type="checkbox" id="camEnh" checked> Amélioration « studio » automatique</label>
+  <label style="display:flex;gap:8px;align-items:center;width:100%;font-weight:600"><input type="checkbox" id="camBg"> Fond uniforme bleu clair (expérimental)</label>
+ </div>
+ <div class="actions" id="camReview" hidden><button id="camOk">✓ Valider et enregistrer</button><button class="secondary" id="camCompare">👁 Comparer avant / après</button><button class="secondary" id="camRetake">↻ Reprendre</button></div>
+</div></div>
+
+<script>
+(function(){
+'use strict';
+/* ===== Licence d’utilisation (réglages) ===== */
+var DAYS=183, WARN=15, DAY=864e5, TOL=2*DAY;
+/* ========================================== */
+var K={a:'scx_a',s:'scx_s',k:'scx_k',e:'scx_e',m:'scx_m'};
+function g(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function p(k,v){try{if(v===''||v==null)localStorage.removeItem(k);else localStorage.setItem(k,String(v))}catch(e){}}
+var st={a:+g(K.a)||0,s:+g(K.s)||0,k:g(K.k)==='1',e:+g(K.e)||0,m:g(K.m)||'',clock:false},merged=false;
+if(!st.a)st.a=Date.now();
+function cacheGet(){try{return caches.open('scx-meta').then(function(c){return c.match('scx-meta.json')}).then(function(r){return r?r.json():null}).catch(function(){return null})}catch(e){return Promise.resolve(null)}}
+function cachePut(o){try{caches.open('scx-meta').then(function(c){return c.put('scx-meta.json',new Response(JSON.stringify(o)))}).catch(function(){})}catch(e){}}
+function save(){p(K.a,st.a);p(K.s,st.s);p(K.k,st.k?'1':'');p(K.e,st.e||'');p(K.m,st.m);if(merged)cachePut({a:st.a,s:st.s})}
+function verdict(t){
+ if(st.k)return{lock:1,why:'k'};
+ if(st.clock||(st.s&&t<st.s-TOL))return{lock:1,why:'c'};
+ var end=st.e||(st.a+DAYS*DAY);
+ if(t>=end)return{lock:1,why:'x'};
+ return{lock:0,left:Math.ceil((end-t)/DAY)};
+}
+function el(tag,css,txt){var d=document.createElement(tag);d.style.cssText=css;if(txt)d.textContent=txt;return d}
+function render(v){
+ var o=document.getElementById('scx-lock'),b=document.getElementById('scx-warn');
+ if(o)o.remove();if(b)b.remove();
+ if(v.lock){
+  var T={x:['Période d’utilisation terminée','La licence de cette application est arrivée à son terme. Vos données sont toujours sur cet appareil : sauvegardez-les maintenant, puis contactez votre fournisseur pour obtenir une nouvelle version.'],
+   k:['Application désactivée',st.m||'Cette version a été désactivée par son éditeur. Sauvegardez vos données puis contactez-le.'],
+   c:['Date de l’appareil incorrecte','Corrigez la date et l’heure du téléphone (réglage automatique), puis rouvrez l’application.']}[v.why];
+  o=el('div','position:fixed;inset:0;z-index:2147483647;background:#10243e;color:#fff;display:flex;align-items:center;justify-content:center;padding:24px;font:16px/1.5 -apple-system,Segoe UI,Roboto,Arial,sans-serif');
+  o.id='scx-lock';
+  var box=el('div','max-width:420px;text-align:center');
+  box.appendChild(el('div','font-size:42px;margin-bottom:8px','🔒'));
+  box.appendChild(el('h2','margin:0 0 12px;font-size:22px',T[0]));
+  box.appendChild(el('p','margin:0 0 22px;color:#d0deea',T[1]));
+  if(v.why!=='c'){
+   var b1=el('button','display:block;width:100%;margin:0 0 10px;padding:14px;border:0;border-radius:12px;background:#d5a63b;color:#10243e;font:700 16px inherit','Sauvegarder mes données');
+   b1.onclick=function(){if(typeof window.exportBackup==='function'){b1.textContent='Sauvegarde en cours…';try{window.exportBackup('all')}catch(e){}}else b1.textContent='Sauvegarde indisponible'};
+   box.appendChild(b1);
+  }
+  var b2=el('button','display:block;width:100%;padding:14px;border:1px solid #ffffff55;border-radius:12px;background:transparent;color:#fff;font:600 16px inherit','Réessayer');
+  b2.onclick=function(){location.reload()};
+  box.appendChild(b2);o.appendChild(box);document.body.appendChild(o);
+  document.body.style.overflow='hidden';
+ }else if(v.left<=WARN){
+  b=el('div','position:fixed;left:0;right:0;bottom:0;z-index:2147483646;background:#d5a63b;color:#10243e;padding:10px 14px;text-align:center;font:600 13px/1.4 -apple-system,Segoe UI,Roboto,Arial,sans-serif','Licence : '+v.left+' jour'+(v.left>1?'s':'')+' restant'+(v.left>1?'s':'')+'. Pensez à sauvegarder vos données (Sauvegarder tout).');
+  b.id='scx-warn';b.onclick=function(){b.remove()};document.body.appendChild(b);
+ }
+}
+function apply(){var t=Date.now(),v=verdict(t);if(!v.lock&&t>st.s)st.s=t;save();render(v)}
+function remote(){
+ if(!window.fetch)return;
+ fetch('status.json?t='+Date.now(),{cache:'no-store'}).then(function(r){
+  if(!r.ok)throw 0;var d=r.headers.get('Date');
+  return r.json().then(function(j){return{j:j,sd:d?Date.parse(d):0}});
+ }).then(function(o){
+  var j=o.j||{},n=Date.now();
+  if(o.sd){if(Math.abs(o.sd-n)>TOL)st.clock=true;else{st.clock=false;if(st.s>n+TOL)st.s=n}}
+  st.k=j.active===false;st.m=typeof j.message==='string'?j.message:'';
+  var e=j.end?Date.parse(j.end+'T23:59:59'):0;st.e=isNaN(e)?0:e;
+  apply();
+ }).catch(function(){});
+}
+render(verdict(Date.now()));
+cacheGet().then(function(m){
+ if(m){if(m.a&&m.a<st.a)st.a=m.a;if(m.s&&m.s>st.s)st.s=m.s}
+ merged=true;apply();remote();
+});
+if('serviceWorker' in navigator&&/^https?:/.test(location.protocol))navigator.serviceWorker.register('sw.js').catch(function(){});
+})();
+</script>
+<script>
+'use strict';
+/* ====================================================================
+   SchoolCard Pro v2 — application autonome (aucune dépendance obligatoire)
+   Stockage : IndexedDB (établissements, élèves, photos en Blob)
+   ==================================================================== */
+const DB_NAME='schoolCardsDB', DB_VER=2, CARD_W=540, CARD_H=630;
+const TUTELLES={
+ MINESEC:{label:'MINESEC — Enseignements secondaires',fr:'MINISTÈRE DES ENSEIGNEMENTS SECONDAIRES',en:'MINISTRY OF SECONDARY EDUCATION'},
+ MINEDUB:{label:'MINEDUB — Éducation de base',fr:'MINISTÈRE DE L\u2019ÉDUCATION DE BASE',en:'MINISTRY OF BASIC EDUCATION'},
+ MINEFOP:{label:'MINEFOP — Emploi et formation professionnelle',fr:'MINISTÈRE DE L\u2019EMPLOI ET DE LA FORMATION PROFESSIONNELLE',en:'MINISTRY OF EMPLOYMENT AND VOCATIONAL TRAINING'},
+ MINESUP:{label:'MINESUP — Enseignement supérieur',fr:'MINISTÈRE DE L\u2019ENSEIGNEMENT SUPÉRIEUR',en:'MINISTRY OF HIGHER EDUCATION'},
+ AUTRE:{label:'Autre (saisie libre)',fr:'',en:''}
+};
+const UUID_RE=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+// <PURE>
+const norm=s=>String(s??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]/g,'');
+const collator=new Intl.Collator('fr',{numeric:true,sensitivity:'base'});
+function uid(){
+ try{if(crypto.randomUUID)return crypto.randomUUID()}catch(e){}
+ const b=crypto.getRandomValues(new Uint8Array(16));b[6]=b[6]&15|64;b[8]=b[8]&63|128;
+ const h=[...b].map(x=>x.toString(16).padStart(2,'0')).join('');
+ return `${h.slice(0,8)}-${h.slice(8,12)}-${h.slice(12,16)}-${h.slice(16,20)}-${h.slice(20)}`;
+}
+/* Retourne 'AAAA-MM-JJ', '' si vide, null si invalide */
+function toISODate(v){
+ if(v===null||v===undefined||v==='')return '';
+ const iso=(y,m,d)=>{const dt=new Date(Date.UTC(y,m-1,d));
+  return dt.getUTCFullYear()===y&&dt.getUTCMonth()===m-1&&dt.getUTCDate()===d&&y>=1960&&y<=2100?`${y}-${String(m).padStart(2,'0')}-${String(d).padStart(2,'0')}`:null};
+ if(v instanceof Date){if(isNaN(v))return null;const t=new Date(v.getTime()+12*3600e3);return iso(t.getFullYear(),t.getMonth()+1,t.getDate())}
+ if(typeof v==='number'){if(v<1||v>80000)return null;const t=new Date(Date.UTC(1899,11,30)+Math.round(v)*86400000);return iso(t.getUTCFullYear(),t.getUTCMonth()+1,t.getUTCDate())}
+ const s=String(v).trim();let m;
+ if(!s)return '';
+ if((m=s.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/)))return iso(+m[1],+m[2],+m[3]);
+ if((m=s.match(/^(\d{1,2})[\/.\-\s](\d{1,2})[\/.\-\s](\d{2}|\d{4})$/))){let y=+m[3];if(y<100)y+=y>30?1900:2000;return iso(y,+m[2],+m[1])}
+ if(/^\d{5}$/.test(s))return toISODate(Number(s));
+ return null;
+}
+function normSexe(v){
+ const n=norm(v);
+ if(['m','masculin','garcon','homme','h','male','g'].includes(n))return 'Masculin';
+ if(['f','feminin','fille','femme','female'].includes(n))return 'Féminin';
+ return '';
+}
+function rowsToObjects(rows){
+ const hi=rows.findIndex(r=>r&&Array.from(r).some(c=>String(c??'').trim()!==''));
+ if(hi<0)return [];
+ const head=Array.from(rows[hi],h=>String(h??'').trim());
+ const out=[];
+ for(let i=hi+1;i<rows.length;i++){
+  const r=Array.from(rows[i]||[]);
+  if(!r.some(c=>String(c??'').trim()!==''))continue;
+  const o={};head.forEach((h,j)=>{if(h)o[h]=r[j]??''});out.push(o);
+ }
+ return out;
+}
+function parseCSV(text){
+ text=text.replace(/^\uFEFF/,'');
+ const first=text.split(/\r?\n/,1)[0];
+ const sep=[';','\t',','].map(s=>[s,first.split(s).length]).sort((a,b)=>b[1]-a[1])[0][0];
+ const rows=[];let row=[],v='',q=false;
+ for(let i=0;i<text.length;i++){
+  const c=text[i];
+  if(q){if(c==='"'&&text[i+1]==='"'){v+='"';i++}else if(c==='"')q=false;else v+=c}
+  else if(c==='"')q=true;
+  else if(c===sep){row.push(v);v=''}
+  else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(v);v='';rows.push(row);row=[]}
+  else v+=c;
+ }
+ if(v!==''||row.length){row.push(v);rows.push(row)}
+ return rowsToObjects(rows);
+}
+const ALIASES={
+ nom:['nom','noms','nomdefamille','lastname','surname','name'],
+ prenom:['prenom','prenoms','prenomeleve','firstname'],
+ full:['nometprenom','nometprenoms','nomsetprenoms','nomprenom','nomprenoms','nomcomplet','eleve','eleves','nomeleve','nomdeleleve','nomsprenoms'],
+ dob:['datenaissance','datedenaissance','datenais','neele','nele','naissance','dob','datenaiss'],
+ birth:['lieunaissance','lieudenaissance','lieunais','lieunaiss','lieu','villenaissance','neea','nea','alieu'],
+ sexe:['sexe','genre','sex','gender'],
+ mat:['matricule','nummatricule','numeromatricule','nmatricule','matric','ideleve','numero'],
+ classe:['classe','class','salle','niveau']
+};
+/* Transforme les lignes brutes (objets) en enregistrements contrôlés */
+function parseStudentRows(rows){
+ if(!rows.length)return{records:[],keys:[],missing:true};
+ const keys=Object.keys(rows[0]),K={};
+ for(const f in ALIASES)K[f]=keys.find(k=>ALIASES[f].includes(norm(k)));
+ if(K.nom===undefined&&K.full===undefined)return{records:[],keys,missing:true};
+ const g=(r,f)=>K[f]===undefined?'':r[K[f]];
+ const records=rows.map((r,i)=>{
+  const issues=[];let fatal=false;
+  const nom=String(g(r,'nom')).trim(),pre=String(g(r,'prenom')).trim(),full=String(g(r,'full')).trim();
+  const name=(K.prenom!==undefined?`${nom||full} ${pre}`:(full||nom)).replace(/\s+/g,' ').trim();
+  const classe=String(g(r,'classe')).trim().replace(/\s+/g,' ');
+  const matricule=String(g(r,'mat')).trim();
+  const rawS=String(g(r,'sexe')).trim(),sexe=normSexe(rawS);
+  if(!name){issues.push('Nom manquant');fatal=true}
+  if(!classe){issues.push('Classe manquante');fatal=true}
+  if(!sexe)issues.push(rawS?`Sexe « ${rawS} » non reconnu`:'Sexe manquant');
+  const dob=toISODate(g(r,'dob'));
+  if(dob===null)issues.push('Date de naissance invalide');
+  return{line:i+2,nom:name,classe,matricule,sexe,dob:dob||'',birth:String(g(r,'birth')).trim(),issues,fatal};
+ });
+ return{records,keys,missing:false};
+}
+/* Recadrage portrait 18x21, sans déformation */
+const PORTRAIT_R=18/21;
+function cropRect(sw,sh,face,bias=.5){
+ let w,h,x,y;
+ if(face){h=Math.min(sh,face.height*2.5);w=h*PORTRAIT_R;if(w>sw){w=sw;h=w/PORTRAIT_R}x=face.x+face.width/2-w/2;y=face.y+face.height/2-h*.42}
+ else{h=Math.min(sh*.96,sw/PORTRAIT_R);w=h*PORTRAIT_R;x=(sw-w)/2;y=(sh-h)*bias}
+ x=Math.max(0,Math.min(sw-w,x));y=Math.max(0,Math.min(sh-h,y));
+ return{x,y,w,h};
+}
+/* ZIP minimal (stockage sans compression) + lecture */
+const CRC_T=(()=>{const t=new Uint32Array(256);for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})();
+function crc32(u){let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CRC_T[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+function zipBlob(files){
+ const enc=new TextEncoder(),parts=[],cd=[];let off=0;
+ for(const f of files){
+  const nb=enc.encode(f.name),crc=crc32(f.data),sz=f.data.length;
+  const lh=new DataView(new ArrayBuffer(30));
+  lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(12,0x21,true);
+  lh.setUint32(14,crc,true);lh.setUint32(18,sz,true);lh.setUint32(22,sz,true);lh.setUint16(26,nb.length,true);
+  parts.push(lh.buffer,nb,f.data);
+  const ch=new DataView(new ArrayBuffer(46));
+  ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(14,0x21,true);
+  ch.setUint32(16,crc,true);ch.setUint32(20,sz,true);ch.setUint32(24,sz,true);ch.setUint16(28,nb.length,true);ch.setUint32(42,off,true);
+  cd.push(ch.buffer,nb);off+=30+nb.length+sz;
+ }
+ const cdSize=cd.reduce((a,b)=>a+b.byteLength,0);
+ const e=new DataView(new ArrayBuffer(22));
+ e.setUint32(0,0x06054b50,true);e.setUint16(8,files.length,true);e.setUint16(10,files.length,true);e.setUint32(12,cdSize,true);e.setUint32(16,off,true);
+ return new Blob([...parts,...cd,e.buffer],{type:'application/zip'});
+}
+async function readZip(buf){
+ const u=new Uint8Array(buf),dv=new DataView(buf);let e=-1;
+ for(let i=u.length-22;i>=Math.max(0,u.length-65557);i--)if(dv.getUint32(i,true)===0x06054b50){e=i;break}
+ if(e<0)throw new Error('Archive ZIP invalide');
+ const n=dv.getUint16(e+10,true);let p=dv.getUint32(e+16,true);const out={},dec=new TextDecoder();
+ for(let k=0;k<n;k++){
+  if(dv.getUint32(p,true)!==0x02014b50)break;
+  const m=dv.getUint16(p+10,true),cs=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),el=dv.getUint16(p+30,true),cl=dv.getUint16(p+32,true),lo=dv.getUint32(p+42,true);
+  const name=dec.decode(u.subarray(p+46,p+46+nl));p+=46+nl+el+cl;
+  out[name]=async()=>{
+   const ln=dv.getUint16(lo+26,true),le=dv.getUint16(lo+28,true),s=lo+30+ln+le,raw=u.subarray(s,s+cs);
+   if(m===0)return raw;
+   if(m===8){
+    if(typeof DecompressionStream==='undefined')throw new Error('NO_DECOMPRESS');
+    const st=new Blob([raw]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+    return new Uint8Array(await new Response(st).arrayBuffer());
+   }
+   throw new Error('Compression ZIP non prise en charge');
+  };
+ }
+ return out;
+}
+// </PURE>
+
+/* ---------- utilitaires interface ---------- */
+const $=id=>document.getElementById(id);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let toastT;
+function toast(msg,type='ok'){const t=$('toast');t.textContent=msg;t.className='toast show '+type;clearTimeout(toastT);toastT=setTimeout(()=>{t.className='toast'},type==='err'?6500:3200)}
+const todayISO=()=>new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);
+function defaultYear(){const d=new Date(),y=d.getFullYear(),s=d.getMonth()>=7?y:y-1;return `${s}/${s+1}`}
+function nextYearLabel(y){const m=String(y).match(/^(\d{4})\/(\d{4})$/);return m?`${+m[1]+1}/${+m[2]+1}`:''}
+const safeImg=s=>/^data:image\/(png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$/.test(s||'')?s:'';
+const safeCol=(c,d)=>/^#[0-9a-f]{6}$/i.test(c||'')?c:d;
+const dateFr=v=>/^\d{4}-\d\d-\d\d$/.test(v||'')?v.split('-').reverse().join('/'):'';
+const toBlob=(c,q=.88,t='image/jpeg')=>new Promise(r=>c.toBlob(r,t,q));
+const isMobile=/Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+/* ---------- IndexedDB ---------- */
+let db;
+function openDB(){return new Promise((res,rej)=>{
+ const r=indexedDB.open(DB_NAME,DB_VER);
+ r.onupgradeneeded=()=>{
+  const d=r.result,tx=r.transaction;let st;
+  st=d.objectStoreNames.contains('students')?tx.objectStore('students'):d.createObjectStore('students',{keyPath:'id'});
+  if(!st.indexNames.contains('schoolId'))st.createIndex('schoolId','schoolId');
+  if(!d.objectStoreNames.contains('schools'))d.createObjectStore('schools',{keyPath:'id'});
+  if(!d.objectStoreNames.contains('photos')){const p=d.createObjectStore('photos',{keyPath:'id'});p.createIndex('schoolId','schoolId')}
+ };
+ r.onsuccess=()=>{db=r.result;db.onversionchange=()=>db.close();res()};
+ r.onerror=()=>rej(r.error);
+ r.onblocked=()=>rej(new Error('Base bloquée : fermez les autres onglets du logiciel puis rechargez.'));
+})}
+const P=r=>new Promise((res,rej)=>{r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)});
+const dbGet=(n,k)=>P(db.transaction(n).objectStore(n).get(k));
+const dbAll=n=>P(db.transaction(n).objectStore(n).getAll());
+const dbByIndex=(n,k)=>P(db.transaction(n).objectStore(n).index('schoolId').getAll(IDBKeyRange.only(k)));
+function dbTx(names,fn){return new Promise((res,rej)=>{
+ const t=db.transaction(names,'readwrite');fn(t);
+ t.oncomplete=()=>res();t.onerror=()=>rej(t.error);t.onabort=()=>rej(t.error||new Error('Écriture annulée (espace de stockage insuffisant ?)'));
+})}
+const dbPut=(n,v)=>dbTx(n,t=>t.objectStore(n).put(v));
+
+/* ---------- état ---------- */
+let schools=[],school=null,students=[],year='',studentLimit=100,persisted=false;
+let formDraft=null,formRemovePhoto=false,importStage=null,pendingPhotos=[],printSession=null;
+
+function defaultSchool(name){
+ const y=defaultYear();
+ return{id:uid(),schoolName:name,tutelle:'MINESEC',ministry:TUTELLES.MINESEC.fr,ministryEn:TUTELLES.MINESEC.en,mottoFr:'Paix - Travail - Patrie',mottoEn:'Peace - Work - Fatherland',
+  town:'',address:'',phone:'',signatory:'Le Proviseur',schoolType:'LYCEE',issueDate:todayISO(),primaryColor:'#0b2a5b',accentColor:'#e2b32c',
+  crest:'',crest2:'',signature:'',seal:'',building:'',cardCfg:{},tagFields:{mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''},years:[y],currentYear:y,classes:{[y]:[]}};
+}
+/* Nettoie un établissement venant d'une ancienne version ou d'une sauvegarde */
+const SCHOOL_TYPES={LYCEE:{label:'Lycée (général, classique, bilingue)',m:'Le Proviseur',f:'La Proviseure'},LYCEE_TECH:{label:'Lycée technique / professionnel',m:'Le Proviseur',f:'La Proviseure'},CES:{label:'CES — Collège d’enseignement secondaire',m:'Le Directeur',f:'La Directrice'},CETIC:{label:'CETIC — Collège d’enseignement technique',m:'Le Directeur',f:'La Directrice'},COLLEGE_PRIVE:{label:'Collège privé / institut',m:'Le Directeur',f:'La Directrice'},PRINCIPAL:{label:'Établissement dirigé par un Principal',m:'Le Principal',f:'La Principale'},AUTRE:{label:'Autre (fonction saisie à la main)',m:'',f:''}};
+function cleanTagFields(o){o=o&&typeof o==='object'?o:{};return{mat:o.mat===0||o.mat===false?0:1,lieu:o.lieu?1:0,classe:o.classe?1:0,sexe:o.sexe?1:0,ecole:o.ecole?1:0,extra:String(o.extra||'').slice(0,60)}}
+function cleanCardCfg(c,years){
+ const out={};if(!c||typeof c!=='object')return out;
+ for(const y of years){const m=c[y];if(!m||typeof m!=='object')continue;out[y]={};
+  for(const [k,v] of Object.entries(m)){const key=String(k).slice(0,40);
+   if(v==='tag'||v==='simple')out[y][key]='tag'}}
+ return out;
+}
+function cleanSchool(o,legacyYear){
+ const d=defaultSchool(String(o.schoolName||o.name||'Établissement').slice(0,120)),t=(v,n=200)=>String(v??'').slice(0,n);
+ const fr=t(o.ministry)||TUTELLES.MINESEC.fr;
+ let tut=TUTELLES[o.tutelle]?o.tutelle:Object.keys(TUTELLES).find(k=>k!=='AUTRE'&&norm(TUTELLES[k].fr)===norm(fr))||'AUTRE';
+ const years=Array.isArray(o.years)&&o.years.length?o.years.map(y=>t(y,20)).filter(Boolean).slice(0,50):[t(o.schoolYear,20)||legacyYear||d.currentYear];
+ const classes={};
+ if(o.classes&&typeof o.classes==='object')for(const y of years)if(Array.isArray(o.classes[y]))classes[y]=o.classes[y].map(c=>t(c,40)).filter(Boolean);
+ for(const y of years)if(!classes[y])classes[y]=[];
+ return{id:UUID_RE.test(o.id||'')?o.id:d.id,schoolName:t(o.schoolName||o.name||'Établissement',120),tutelle:tut,ministry:fr,
+  ministryEn:t(o.ministryEn)||(tut==='MINESEC'||!o.ministry?TUTELLES.MINESEC.en:''),
+  mottoFr:t(o.mottoFr)||d.mottoFr,mottoEn:t(o.mottoEn)||d.mottoEn,town:t(o.town,80),address:t(o.address),phone:t(o.phone,40),
+  signatory:t(o.signatory,80)||d.signatory,schoolType:SCHOOL_TYPES[o.schoolType]?o.schoolType:'LYCEE',issueDate:/^\d{4}-\d\d-\d\d$/.test(o.issueDate||'')?o.issueDate:d.issueDate,
+  primaryColor:safeCol(o.primaryColor,d.primaryColor),accentColor:safeCol(o.accentColor,d.accentColor),
+  crest:safeImg(o.crest),crest2:safeImg(o.crest2),signature:safeImg(o.signature),seal:safeImg(o.seal),building:safeImg(o.building),
+  years,currentYear:years.includes(o.currentYear)?o.currentYear:years[0],classes,cardCfg:cleanCardCfg(o.cardCfg,years),tagFields:cleanTagFields(o.tagFields)};
+}
+function cleanStudent(o,schoolId,defYear){
+ if(!o||!UUID_RE.test(o.id||''))return null;
+ const t=(v,n=120)=>String(v??'').slice(0,n).trim();
+ const nom=t(o.nom);if(!nom)return null;
+ return{id:o.id,schoolId,year:t(o.year,20)||defYear,nom,matricule:t(o.matricule,40),classe:t(o.classe,40),
+  sexe:normSexe(o.sexe),dob:toISODate(o.dob)||'',birth:t(o.birth),hasPhoto:false,thumb:'',printedAt:Number(o.printedAt)||null};
+}
+const saveSchool_=()=>dbPut('schools',school);
+function yearClasses(){if(!school.classes)school.classes={};if(!school.classes[year])school.classes[year]=[];return school.classes[year]}
+function classList(){return[...new Set([...yearClasses(),...students.map(s=>s.classe).filter(Boolean)])].sort(collator.compare)}
+
+/* ---------- images ---------- */
+function loadImage(src,label='image'){return new Promise((res,rej)=>{
+ const isBlob=src instanceof Blob,u=isBlob?URL.createObjectURL(src):src,i=new Image();
+ i.onload=()=>{if(isBlob)URL.revokeObjectURL(u);res(i)};
+ i.onerror=()=>{if(isBlob)URL.revokeObjectURL(u);rej(new Error('Image illisible : '+label+' (le format HEIC n\u2019est pas toujours pris en charge : utilisez JPG ou PNG).'))};
+ i.src=u;
+})}
+async function detectFace(src){
+ if(!('FaceDetector' in window))return null;
+ try{const f=await new FaceDetector({fastMode:true,maxDetectedFaces:1}).detect(src);return f[0]?.boundingBox||null}catch(e){return null}
+}
+/* ===== Amélioration photographique automatique (rendu « studio ») =====
+   1 balance des blancs douce · 2 niveaux (points noir/blanc) · 3 exposition mesurée sur le visage
+   4 courbe en S + épaulement des hautes lumières + léger relevé des ombres · 5 vibrance · 6 netteté + clarté
+   Le teint n'est jamais « blanchi » : l'exposition n'est corrigée que si le visage est franchement trop sombre ou trop clair. */
+function boxBlur(src,w,h,r){
+ const tmp=new Float32Array(w*h),out=new Float32Array(w*h),dd=2*r+1;
+ for(let y=0;y<h;y++){const o=y*w;let s=0;for(let k=-r;k<=r;k++)s+=src[o+Math.min(w-1,Math.max(0,k))];
+  for(let k=0;k<w;k++){tmp[o+k]=s/dd;s+=src[o+Math.min(w-1,k+r+1)]-src[o+Math.max(0,k-r)]}}
+ for(let k=0;k<w;k++){let s=0;for(let y=-r;y<=r;y++)s+=tmp[Math.min(h-1,Math.max(0,y))*w+k];
+  for(let y=0;y<h;y++){out[y*w+k]=s/dd;s+=tmp[Math.min(h-1,y+r+1)*w+k]-tmp[Math.max(0,y-r)*w+k]}}
+ return out;
+}
+function enhance(x,w,h,noise=0){
+ const im=x.getImageData(0,0,w,h),d=im.data,n=w*h,clamp=(v,a,b)=>v<a?a:v>b?b:v;
+ const L=new Float32Array(n),hist=new Uint32Array(256);
+ for(let i=0,p=0;i<n;i++,p+=4){const l=.2126*d[p]+.7152*d[p+1]+.0722*d[p+2];L[i]=l;hist[Math.min(255,l|0)]++}
+ const pct=q=>{const t=q*n;let c=0;for(let v=0;v<256;v++){c+=hist[v];if(c>=t)return v}return 255};
+ let bp=Math.min(pct(.005),45),wp=Math.max(pct(.995),205);if(wp-bp<60){bp=0;wp=255}
+ /* 1. balance des blancs : uniquement sur les zones quasi neutres (murs, chemises blanches) */
+ let sr=0,sg=0,sb=0,c=0;
+ for(let i=0,p=0;i<n;i+=2,p+=8){const r=d[p],g=d[p+1],b=d[p+2];if(Math.max(r,g,b)-Math.min(r,g,b)<35&&L[i]>70&&L[i]<225){sr+=r;sg+=g;sb+=b;c++}}
+ let gr=1,gg=1,gb=1;
+ if(c>n*.01){const m=(sr+sg+sb)/3;gr=1+(clamp(m/sr,.94,1.06)-1)*.7;gg=1+(clamp(m/sg,.94,1.06)-1)*.7;gb=1+(clamp(m/sb,.94,1.06)-1)*.7}
+ /* 2-3. exposition mesurée sur la zone du visage */
+ let fs=0,fc=0;const cx=w*.5,cy=h*.4,rx=w*.2,ry=h*.17;
+ for(let y=Math.floor(cy-ry);y<cy+ry;y++)for(let xx=Math.floor(cx-rx);xx<cx+rx;xx++){const dx=(xx-cx)/rx,dy=(y-cy)/ry;if(dx*dx+dy*dy<=1){const l=L[y*w+xx];if(l>12&&l<252){fs+=l;fc++}}}
+ const faceMean=fc>50?fs/fc:128,fm=clamp((faceMean-bp)/(wp-bp),.02,.98)*255;
+ const desired=fm<90?90-(90-fm)*.25:fm>165?165+(fm-165)*.25:fm;
+ const gamma=clamp(Math.log(desired/255)/Math.log(fm/255),.6,1.6);
+ /* 4. courbe tonale (une table par canal) */
+ const SH=.8+.2*Math.tanh(1),contrast=(wp-bp)>235?.22:.3;
+ const lut=[gr,gg,gb].map(g=>{const t=new Uint8ClampedArray(256);
+  for(let v=0;v<256;v++){let q=clamp((v*g-bp)/(wp-bp),0,1);q=Math.pow(q,gamma);
+   if(q>.8)q=(.8+.2*Math.tanh((q-.8)/.2))/SH;
+   const s=q*q*(3-2*q);q+=contrast*(s-q);q+=.03*Math.pow(1-q,4);t[v]=Math.round(clamp(q,0,1)*255)}
+  return t});
+ /* 5. couleurs naturelles : la courbe de contraste est compensée pour ne pas sur-saturer le teint ; léger plus pour les couleurs ternes */
+ const L2=new Float32Array(n);
+ for(let i=0,p=0;i<n;i++,p+=4){
+  const r0=d[p],g0=d[p+1],b0=d[p+2],mx0=Math.max(r0,g0,b0),s0=mx0?(mx0-Math.min(r0,g0,b0))/mx0:0;
+  const r=lut[0][r0],g=lut[1][g0],b=lut[2][b0],l=.2126*r+.7152*g+.0722*b,mx=Math.max(r,g,b),s1=mx?(mx-Math.min(r,g,b))/mx:0;
+  const k=s1>.001?clamp(s0*(1+.1*(1-s0))/s1,.7,1.2):1;
+  d[p]=l+(r-l)*k;d[p+1]=l+(g-l)*k;d[p+2]=l+(b-l)*k;L2[i]=l;
+ }
+ /* 6. netteté fine (masque flou avec seuil anti-bruit) + clarté sur les tons moyens */
+ const b1=boxBlur(L2,w,h,2),b2=boxBlur(L2,w,h,14);
+ for(let i=0,p=0;i<n;i++,p+=4){
+  let f=L2[i]-b1[i];const dz=2+noise*1.5;if(f>-dz&&f<dz)f=0;
+  const mid=1-Math.abs(L2[i]/127.5-1),delta=f*.75+(L2[i]-b2[i])*.14*mid;
+  d[p]+=delta;d[p+1]+=delta;d[p+2]+=delta;
+ }
+ x.putImageData(im,0,0);
+}
+const optOn=(k,def)=>{try{const v=localStorage.getItem(k);return v===null?def:v==='1'}catch(e){return def}};
+const enhanceOn=()=>optOn('sc_enh',true),bgOn=()=>optOn('sc_bg',false),smartOn=()=>optOn('sc_smart',true);
+/* ===== Chaîne photo « studio » =====
+   cadrage → débruitage adaptatif → exposition/contraste/netteté (enhance) → lumière de studio → fond uniforme (option) */
+const clampv=(v,a,b)=>v<a?a:v>b?b:v;
+/* ---------- cadrage intelligent sans IA : repérage du visage par la couleur de peau ---------- */
+function skinFace(cv){
+ const sc=Math.min(1,160/Math.max(cv.width,cv.height)),w=Math.max(16,Math.round(cv.width*sc)),h=Math.max(16,Math.round(cv.height*sc)),n=w*h;
+ const t=document.createElement('canvas');t.width=w;t.height=h;const tx=t.getContext('2d',{willReadFrequently:true});
+ tx.drawImage(cv,0,0,w,h);const d=tx.getImageData(0,0,w,h).data;let m=new Uint8Array(n);
+ let ms=0;for(let i=0,p=0;i<n;i++,p+=4)ms+=.299*d[p]+.587*d[p+1]+.114*d[p+2];
+ const gain=clampv(120/Math.max(ms/n,1),1,3.2);/* photos sombres : on normalise avant de chercher la peau */
+ for(let i=0,p=0;i<n;i++,p+=4){const r=Math.min(255,d[p]*gain),g=Math.min(255,d[p+1]*gain),b=Math.min(255,d[p+2]*gain),y=.299*r+.587*g+.114*b,cb=128-.168736*r-.331264*g+.5*b,cr=128+.5*r-.418688*g-.081312*b;
+  m[i]=(cb>=77&&cb<=128&&cr>=134&&cr<=176&&y>30&&y<242&&r>g&&g>b*.9)?1:0}
+ const er=new Uint8Array(n);for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){const i=y*w+x;er[i]=m[i]&m[i-1]&m[i+1]&m[i-w]&m[i+w]}
+ m=new Uint8Array(n);for(let y=1;y<h-1;y++)for(let x=1;x<w-1;x++){const i=y*w+x;m[i]=er[i]|er[i-1]|er[i+1]|er[i-w]|er[i+w]}
+ const lab=new Int32Array(n),comps=[],st=[];let id=0;
+ for(let s=0;s<n;s++){if(!m[s]||lab[s])continue;id++;let area=0,x0=w,x1=0,y0=h,y1=0,sx=0,sy=0;st.push(s);lab[s]=id;
+  while(st.length){const i=st.pop(),x=i%w,y=(i/w)|0;area++;sx+=x;sy+=y;if(x<x0)x0=x;if(x>x1)x1=x;if(y<y0)y0=y;if(y>y1)y1=y;
+   if(x>0&&m[i-1]&&!lab[i-1]){lab[i-1]=id;st.push(i-1)}if(x<w-1&&m[i+1]&&!lab[i+1]){lab[i+1]=id;st.push(i+1)}
+   if(y>0&&m[i-w]&&!lab[i-w]){lab[i-w]=id;st.push(i-w)}if(y<h-1&&m[i+w]&&!lab[i+w]){lab[i+w]=id;st.push(i+w)}}
+  comps.push({id,area,x0,x1,y0,y1,cx:sx/area,cy:sy/area})}
+ let best=null,bs=0;
+ for(const c of comps){const bw=c.x1-c.x0+1,bh=c.y1-c.y0+1,fr=c.area/n;
+  if(fr<.008||fr>.5||bw>w*.9)continue;const asp=bh/bw,fill=c.area/(bw*bh);if(asp<.45||asp>3)continue;
+  const sc2=c.area*(1-Math.min(.9,Math.abs(c.cx/w-.5)*1.3))*(c.y0/h<.4?1:c.y0/h<.55?.5:.2)*(c.x0<=1&&c.x1>=w-2?.4:1)*(fill>.4?1:.5);if(sc2>bs){bs=sc2;best=c}}
+ if(!best)return null;
+ const bh=best.y1-best.y0+1,widths=[],xs=[];
+ for(let y=best.y0+Math.round(bh*.08);y<=best.y0+Math.round(bh*.45);y++){let a=0,b=-1,cnt=0;for(let x=best.x0;x<=best.x1;x++)if(lab[y*w+x]===best.id){if(a===0&&b<0)a=x;b=x;cnt++}if(cnt){widths.push(cnt);xs.push((a+b)/2)}}
+ if(widths.length<3)return null;
+ widths.sort((p,q)=>p-q);xs.sort((p,q)=>p-q);
+ const Wf=widths[Math.floor(widths.length*.5)]*1.15,cx=xs[xs.length>>1];
+ return{x:(cx-Wf/2)/sc,y:best.y0/sc,width:Wf/sc,height:Wf*1.12/sc,method:'peau'};
+}
+/* ---------- mesures de qualité (sur le portrait avant retouche) ---------- */
+function photoQuality(cv){
+ const w=cv.width,h=cv.height,x0=Math.round(w*.2),y0=Math.round(h*.1),W=Math.round(w*.6),H=Math.round(h*.62);
+ const d=cv.getContext('2d').getImageData(x0,y0,W,H).data,g=new Float32Array(W*H);let sum=0,dark=0,bright=0;
+ for(let i=0,p=0;i<W*H;i++,p+=4){const l=.2126*d[p]+.7152*d[p+1]+.0722*d[p+2];g[i]=l;sum+=l;if(l<35)dark++;if(l>235)bright++}
+ let s=0,s2=0,k=0;
+ for(let y=1;y<H-1;y+=2)for(let x=1;x<W-1;x+=2){const i=y*W+x,v=4*g[i]-g[i-1]-g[i+1]-g[i-W]-g[i+W];s+=v;s2+=v*v;k++}
+ const sharp=s2/k-(s/k)*(s/k);
+ return{sharp:Math.round(sharp),mean:Math.round(sum/(W*H)),dark:dark/(W*H),bright:bright/(W*H)};
+}
+function qualityLabels(q){
+ const out=[];
+ out.push(q.sharp<25?['err','Photo floue — reprenez-la en tenant le téléphone immobile']:q.sharp<60?['warn','Netteté moyenne']:['ok','Netteté correcte']);
+ if(q.mean<70||q.dark>.35)out.push(['warn','Visage sombre — placez l’élève face à la lumière']);
+ else if(q.mean>200||q.bright>.3)out.push(['warn','Trop lumineux — évitez le contre-jour ou le flash direct']);
+ return out;
+}
+/* ---------- débruitage adaptatif (bruit des photos de téléphone en faible lumière) ---------- */
+function denoise(x,w,h){
+ const im=x.getImageData(0,0,w,h),d=im.data,n=w*h,Y=new Float32Array(n),Cb=new Float32Array(n),Cr=new Float32Array(n);
+ for(let i=0,p=0;i<n;i++,p+=4){const r=d[p],g=d[p+1],b=d[p+2];Y[i]=.299*r+.587*g+.114*b;Cb[i]=-.168736*r-.331264*g+.5*b;Cr[i]=.5*r-.418688*g-.081312*b}
+ const dif=[];for(let y=2;y<h-2;y+=3)for(let xx=2;xx<w-2;xx+=3){const i=y*w+xx,a=(Y[i-1]+Y[i+1]+Y[i-w]+Y[i+w])/4;dif.push(Math.abs(Y[i]-a))}
+ dif.sort((a,b)=>a-b);const sigma=dif[Math.floor(dif.length*.5)]*1.4826*1.25,s=clampv((sigma-1.2)/4,0,1);
+ if(s<.05)return{sigma,strength:0};
+ const cbB=boxBlur(Cb,w,h,2),crB=boxBlur(Cr,w,h,2),rs=9+sigma*4,two=2*rs*rs,Yo=new Float32Array(n),sw=[1,.6,.36];
+ for(let y=0;y<h;y++)for(let xx=0;xx<w;xx++){const i=y*w+xx,c=Y[i];let a=0,b=0;
+  for(let dy=-2;dy<=2;dy++){const yy=y+dy;if(yy<0||yy>=h)continue;for(let dx=-2;dx<=2;dx++){const x2=xx+dx;if(x2<0||x2>=w)continue;
+   const v=Y[yy*w+x2],df=v-c,wt=sw[Math.max(Math.abs(dx),Math.abs(dy))]*Math.exp(-df*df/two);a+=wt*v;b+=wt}}
+  Yo[i]=c+(a/b-c)*s}
+ for(let i=0,p=0;i<n;i++,p+=4){const yv=Yo[i],cb=Cb[i]+(cbB[i]-Cb[i])*s,cr=Cr[i]+(crB[i]-Cr[i])*s;
+  d[p]=clampv(yv+1.402*cr,0,255);d[p+1]=clampv(yv-.344136*cb-.714136*cr,0,255);d[p+2]=clampv(yv+1.772*cb,0,255)}
+ x.putImageData(im,0,0);return{sigma,strength:s};
+}
+/* ---------- lumière de studio : rattrape les ombres franches, lumière douce sur le visage, léger vignettage ---------- */
+function studioLight(x,w,h){
+ const im=x.getImageData(0,0,w,h),d=im.data,n=w*h,f=6,sw=Math.ceil(w/f),sh=Math.ceil(h/f),sm=new Float32Array(sw*sh);
+ for(let y=0;y<sh;y++)for(let xx=0;xx<sw;xx++){let a=0,c=0;for(let dy=0;dy<f;dy++)for(let dx=0;dx<f;dx++){const X=xx*f+dx,Y=y*f+dy;if(X<w&&Y<h){const p=(Y*w+X)*4;a+=.299*d[p]+.587*d[p+1]+.114*d[p+2];c++}}sm[y*sw+xx]=a/c}
+ const il=boxBlur(boxBlur(sm,sw,sh,5),sw,sh,5);
+ const cxs=Math.floor(sw*.5),cys=Math.floor(sh*.4);let ref=0,rc=0;
+ for(let y=Math.max(0,cys-6);y<Math.min(sh,cys+6);y++)for(let xx=Math.max(0,cxs-5);xx<Math.min(sw,cxs+5);xx++){ref+=il[y*sw+xx];rc++}ref/=rc||1;
+ const fx=w*.5,fy=h*.4,sg=w*.38;
+ for(let y=0;y<h;y++){const gy=Math.min(sh-1,y/f),y0=Math.floor(gy),y1=Math.min(sh-1,y0+1),ty=gy-y0;
+  for(let xx=0;xx<w;xx++){const gx=Math.min(sw-1,xx/f),x0=Math.floor(gx),x1=Math.min(sw-1,x0+1),tx=gx-x0;
+   const L=(il[y0*sw+x0]*(1-tx)+il[y0*sw+x1]*tx)*(1-ty)+(il[y1*sw+x0]*(1-tx)+il[y1*sw+x1]*tx)*ty;
+   const lift=1+.3*(clampv(ref/Math.max(L,20),.75,1.5)-1);
+   const dx=xx-fx,dy=(y-fy)*.85,r2=(dx*dx+dy*dy)/(sg*sg),key=1+.045*Math.exp(-r2),vig=1-.07*clampv((Math.sqrt(r2)-1.1)/1.2,0,1);
+   const g=lift*key*vig,p=(y*w+xx)*4;d[p]=clampv(d[p]*g,0,255);d[p+1]=clampv(d[p+1]*g,0,255);d[p+2]=clampv(d[p+2]*g,0,255)}}
+ x.putImageData(im,0,0);
+}
+/* ---------- fond uniforme bleu très clair (option, expérimental) ---------- */
+function uniformBackground(x,w,h){
+ const im=x.getImageData(0,0,w,h),d=im.data,n=w*h,Y=new Float32Array(n),Cb=new Float32Array(n),Cr=new Float32Array(n);
+ for(let i=0,p=0;i<n;i++,p+=4){const r=d[p],g=d[p+1],b=d[p+2];Y[i]=.299*r+.587*g+.114*b;Cb[i]=-.168736*r-.331264*g+.5*b;Cr[i]=.5*r-.418688*g-.081312*b}
+ const yb=boxBlur(Y,w,h,1),cbb=boxBlur(Cb,w,h,1),crb=boxBlur(Cr,w,h,1),sam=[];
+ const band=Math.round(w*.07),maxY=Math.round(h*.55);
+ for(let y=0;y<maxY;y+=3)for(let xx=0;xx<w;xx+=3)if(y<band||xx<band||xx>=w-band)sam.push(y*w+xx);
+ const med=a=>{const s=Float32Array.from(a).sort();return s[s.length>>1]};
+ const my=med(sam.map(i=>yb[i])),mcb=med(sam.map(i=>cbb[i])),mcr=med(sam.map(i=>crb[i]));
+ const dist=i=>Math.hypot((yb[i]-my)*.55,cbb[i]-mcb,crb[i]-mcr);
+ const ds=sam.map(dist).sort((a,b)=>a-b),mad=ds[ds.length>>1];
+ if(ds[Math.floor(ds.length*.75)]>26)return{ok:false,why:'fond trop irrégulier'};
+ const T=clampv(mad*2.6+12,15,30),bg=new Uint8Array(n),stack=[];
+ const grad=i=>{const x0=i%w,y0=(i/w)|0;if(x0<1||y0<1||x0>=w-1||y0>=h-1)return 0;return Math.abs(yb[i+1]-yb[i-1])+Math.abs(yb[i+w]-yb[i-w])};
+ const GT=34,okp=i=>dist(i)<T&&grad(i)<GT;
+ for(let xx=0;xx<w;xx++)for(const y of [0,1]){const i=y*w+xx;if(!bg[i]&&okp(i)){bg[i]=1;stack.push(i)}}
+ for(let y=0;y<maxY;y++)for(const xx of [0,1,w-2,w-1]){const i=y*w+xx;if(!bg[i]&&okp(i)){bg[i]=1;stack.push(i)}}
+ while(stack.length){const i=stack.pop(),x0=i%w,y0=(i/w)|0;
+  if(x0>0&&!bg[i-1]&&okp(i-1)){bg[i-1]=1;stack.push(i-1)}if(x0<w-1&&!bg[i+1]&&okp(i+1)){bg[i+1]=1;stack.push(i+1)}
+  if(y0>0&&!bg[i-w]&&okp(i-w)){bg[i-w]=1;stack.push(i-w)}if(y0<h-1&&!bg[i+w]&&okp(i+w)){bg[i+w]=1;stack.push(i+w)}}
+ let cov=0;for(let i=0;i<n;i++)cov+=bg[i];cov/=n;
+ const ci=Math.round(h*.42)*w+Math.round(w*.5);
+ if(cov<.08||cov>.72||bg[ci])return{ok:false,why:'séparation incertaine',cov};
+ /* garde-fous : le sujet doit rester intact, sinon on ne touche à rien */
+ const frac=(x0,x1,y0,y1)=>{let c=0,t=0;for(let y=Math.round(y0*h);y<Math.round(y1*h);y++)for(let xx=Math.round(x0*w);xx<Math.round(x1*w);xx++){c+=bg[y*w+xx];t++}return c/t};
+ if(frac(.3,.7,.22,1)>.02||frac(.38,.62,.1,.5)>.005)return{ok:false,why:'le visage serait abîmé',cov};
+ const fd=[];for(let y=Math.round(h*.3);y<Math.round(h*.46);y+=2)for(let xx=Math.round(w*.4);xx<Math.round(w*.6);xx+=2)fd.push(dist(y*w+xx));
+ fd.sort((p,q)=>p-q);if(fd[fd.length>>1]<24)return{ok:false,why:'fond trop proche de la peau',cov};
+ /* le contour du sujet doit être net : peu de « trous » de fond à l'intérieur du buste */
+ if(frac(.25,.75,.5,1)>.03)return{ok:false,why:'séparation incertaine',cov};
+ const a=new Float32Array(n);for(let i=0;i<n;i++)a[i]=bg[i]?0:1;
+ const sm=boxBlur(boxBlur(a,w,h,1),w,h,1);
+ for(let y=0;y<h;y++){const t=y/h,br=232-12*t,bgc=[br-4,br+4,br+14];
+  for(let xx=0;xx<w;xx++){const i=y*w+xx,al=clampv((sm[i]-.3)/.45,0,1),p=i*4;
+   d[p]=d[p]*al+bgc[0]*(1-al);d[p+1]=d[p+1]*al+bgc[1]*(1-al);d[p+2]=d[p+2]*al+bgc[2]*(1-al)}}
+ x.putImageData(im,0,0);return{ok:true,cov};
+}
+async function canvasVariant(cv){
+ const tc=document.createElement('canvas');tc.width=90;tc.height=105;tc.getContext('2d').drawImage(cv,0,0,90,105);
+ const card=await toBlob(cv,.92);return{card,thumb:tc.toDataURL('image/jpeg',.7),url:URL.createObjectURL(card)};
+}
+/* src : image ou canvas ; retourne {card, original, thumb, url, enhanced, alt, quality, info} (alt = version non retouchée) */
+async function processPortrait(src,sw,sh,bias=.5,opts={}){
+ const sc=Math.min(1,1280/Math.max(sw,sh)),oc=document.createElement('canvas');
+ oc.width=Math.round(sw*sc);oc.height=Math.round(sh*sc);
+ oc.getContext('2d').drawImage(src,0,0,oc.width,oc.height);
+ let face=await detectFace(oc),how=face?'détecteur du navigateur':'';
+ if(!face&&smartOn()){try{face=skinFace(oc);how=face?'couleur de peau':''}catch(e){face=null}}
+ const r=cropRect(oc.width,oc.height,face,bias);
+ const c=document.createElement('canvas');c.width=CARD_W;c.height=CARD_H;
+ const x=c.getContext('2d',{willReadFrequently:true});x.imageSmoothingQuality='high';
+ x.drawImage(oc,r.x,r.y,r.w,r.h,0,0,CARD_W,CARD_H);
+ const quality=photoQuality(c),on=enhanceOn(),info={framing:how||'centre de l’image'};let rc=null;
+ if(on&&opts.raw!==false){rc=document.createElement('canvas');rc.width=CARD_W;rc.height=CARD_H;rc.getContext('2d').drawImage(c,0,0)}
+ if(on){const dn=denoise(x,CARD_W,CARD_H);enhance(x,CARD_W,CARD_H,dn.sigma||0);studioLight(x,CARD_W,CARD_H)}
+ if(bgOn()){const b=uniformBackground(x,CARD_W,CARD_H);info.bg=b.ok?'appliqué':('non appliqué ('+b.why+')')}
+ const [main,alt,original]=await Promise.all([canvasVariant(c),rc?canvasVariant(rc):null,toBlob(oc,.85)]);
+ return{...main,original,enhanced:on,alt:alt?{...alt,enhanced:false}:null,quality,info};
+}
+/* netteté d'une image vidéo (pour garder la meilleure de plusieurs captures) */
+function frameSharpness(cv){const w=300,h=Math.max(8,Math.round(cv.height*w/cv.width)),t=document.createElement('canvas');t.width=w;t.height=h;t.getContext('2d').drawImage(cv,0,0,w,h);return photoQuality(t).sharp}
+
+async function processFile(file,opts){const img=await loadImage(file,file.name);return processPortrait(img,img.naturalWidth,img.naturalHeight,.15,opts)}
+async function fileToLogo(file,removeBlack=false,asJpeg=false){
+ const img=await loadImage(file,file.name),sc=Math.min(1,(asJpeg?800:900)/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement('canvas');
+ c.width=Math.max(1,Math.round(img.naturalWidth*sc));c.height=Math.max(1,Math.round(img.naturalHeight*sc));
+ const ctx=c.getContext('2d',{willReadFrequently:true});ctx.drawImage(img,0,0,c.width,c.height);
+ if(removeBlack){
+  const frame=ctx.getImageData(0,0,c.width,c.height),d=frame.data;
+  for(let i=0;i<d.length;i+=4){
+   const r=d[i],g=d[i+1],b=d[i+2],mx=Math.max(r,g,b),mn=Math.min(r,g,b),lum=.2126*r+.7152*g+.0722*b;
+   if(lum<24){d[i+3]=0}
+   else if(lum<68 && mx-mn<38){d[i+3]=Math.round(d[i+3]*(lum-24)/44)}
+  }
+  ctx.putImageData(frame,0,0);
+  return c.toDataURL('image/png');
+ }
+ if(asJpeg){const j=document.createElement('canvas');j.width=c.width;j.height=c.height;const jx=j.getContext('2d');jx.fillStyle='#fff';jx.fillRect(0,0,j.width,j.height);jx.drawImage(c,0,0);return j.toDataURL('image/jpeg',.85)}
+ return file.type==='image/jpeg'?c.toDataURL('image/jpeg',.9):c.toDataURL('image/png');
+}
+
+/* ---------- navigation ---------- */
+function showTab(id){
+ document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+ document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active',p.id===id));
+ if(id==='print')updatePrintCount();if(id==='roster')renderRoster();if(id==='dashboard')renderDashboard();
+ scrollTo({top:0});
+}
+document.getElementById('tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)showTab(b.dataset.tab)});
+document.addEventListener('click',e=>{const c=e.target.closest('[data-close]');if(c){const m=$(c.dataset.close);m.hidden=true;document.body.classList.remove('noscroll')}});
+function openModal(id){$(id).hidden=false;document.body.classList.add('noscroll')}
+function closeModal(id){$(id).hidden=true;if($('studentModal').hidden&&$('camModal').hidden)document.body.classList.remove('noscroll')}
+
+/* ---------- établissements & années ---------- */
+async function loadTenant(){
+ school=schools.find(s=>s.id===localStorage.getItem('sc_current'))||schools[0];
+ localStorage.setItem('sc_current',school.id);
+ year=localStorage.getItem('sc_year_'+school.id);
+ if(!school.years.includes(year))year=school.currentYear||school.years[0];
+ await reloadStudents();renderTenant();loadSchoolForm();refreshAll();
+}
+async function reloadStudents(){students=(await dbByIndex('students',school.id)).filter(s=>s.year===year);studentLimit=100}
+function renderTenant(){
+ $('schoolSelect').innerHTML=schools.map(s=>`<option value="${esc(s.id)}">${esc(s.schoolName||'Sans nom')}</option>`).join('');
+ $('schoolSelect').value=school.id;
+ $('yearSelect').innerHTML=school.years.map(y=>`<option>${esc(y)}</option>`).join('');
+ $('yearSelect').value=year;
+}
+$('schoolSelect').onchange=async e=>{localStorage.setItem('sc_current',e.target.value);await loadTenant()};
+$('yearSelect').onchange=async e=>{year=e.target.value;localStorage.setItem('sc_year_'+school.id,year);await reloadStudents();loadSchoolForm();refreshAll()};
+$('btnNewSchool').onclick=async()=>{
+ const name=prompt('Nom du nouvel établissement :');if(!name||!name.trim())return;
+ const s=defaultSchool(name.trim().slice(0,120));await dbPut('schools',s);schools.push(s);localStorage.setItem('sc_current',s.id);
+ await loadTenant();showTab('school');toast('Établissement créé : ses données sont indépendantes.');
+};
+$('btnRenameSchool').onclick=async()=>{
+ const n=prompt('Nouveau nom :',school.schoolName);if(!n||!n.trim())return;
+ school.schoolName=n.trim().slice(0,120);await saveSchool_();renderTenant();loadSchoolForm();toast('Établissement renommé.');
+};
+$('btnDeleteSchool').onclick=async()=>{
+ if(schools.length<=1)return toast('Conservez au moins un établissement.','err');
+ const n=prompt(`Supprimer « ${school.schoolName} » avec TOUS ses élèves, années et photos ?\nCette action est irréversible. Tapez SUPPRIMER pour confirmer :`);
+ if(n!=='SUPPRIMER')return;
+ const sts=await dbByIndex('students',school.id),phs=await dbByIndex('photos',school.id),sid=school.id;
+ await dbTx(['students','photos','schools'],t=>{sts.forEach(s=>t.objectStore('students').delete(s.id));phs.forEach(p=>t.objectStore('photos').delete(p.id));t.objectStore('schools').delete(sid)});
+ schools=schools.filter(s=>s.id!==sid);localStorage.setItem('sc_current',schools[0].id);await loadTenant();toast('Établissement supprimé.');
+};
+$('btnNewYear').onclick=async()=>{
+ const label=prompt('Nouvelle année scolaire (ex. '+(nextYearLabel(year)||'2027/2028')+') :',nextYearLabel(year));
+ if(!label||!label.trim())return;const y=label.trim().slice(0,20);
+ if(school.years.includes(y))return toast('Cette année existe déjà.','err');
+ const carry=confirm('Reporter la liste des élèves dans la nouvelle année (sans leurs photos) ?\n\nOK = reporter les élèves   ·   Annuler = année vide (classes conservées)');
+ const old=year;school.years.push(y);school.classes[y]=[...(school.classes[old]||[])];school.cardCfg=school.cardCfg||{};school.cardCfg[y]=JSON.parse(JSON.stringify((school.cardCfg[old])||{}));school.currentYear=y;
+ const copies=carry?students.map(s=>({...s,id:uid(),year:y,hasPhoto:false,thumb:'',printedAt:null,photoUpdatedAt:null})):[];
+ await dbTx(['schools','students'],t=>{t.objectStore('schools').put(school);copies.forEach(c=>t.objectStore('students').put(c))});
+ year=y;localStorage.setItem('sc_year_'+school.id,y);await reloadStudents();renderTenant();loadSchoolForm();refreshAll();
+ toast(`Année ${y} créée${carry?' avec '+copies.length+' élève(s) reporté(s)':''}. L'année précédente reste consultable.`);
+};
+
+/* ---------- réglages de l'établissement ---------- */
+const LOGOS=[['crest','Logo de l\u2019établissement','À gauche du nom et en filigrane'],['crest2','Armoiries / emblème national','Au centre de l\u2019en-tête (si seul un logo est importé, il est placé au centre)'],['building','Image du bâtiment (facultative)','Photo de l\u2019établissement, en fondu à droite du nom'],['signature','Signature seule (facultative)','Placée sous la date et la fonction'],['seal','Cachet (rond) ou cachet + signature','Fond noir supprimé automatiquement. Un cachet rond va à droite ; une image large (cachet + signature) se place sous la date']];
+$('fTutelle').innerHTML=Object.entries(TUTELLES).map(([k,v])=>`<option value="${k}">${esc(v.label)}</option>`).join('');
+$('fType').innerHTML=Object.entries(SCHOOL_TYPES).map(([k,v])=>`<option value="${k}">${esc(v.label)}</option>`).join('');
+function applySigTitle(){const t=SCHOOL_TYPES[$('fType').value];if(t&&t.m)$('fSignatory').value=$('fSigSex').value==='f'?t.f:t.m}
+$('fType').onchange=applySigTitle;$('fSigSex').onchange=applySigTitle;
+$('fTutelle').onchange=e=>{const t=TUTELLES[e.target.value];if(e.target.value!=='AUTRE'){$('fMinistry').value=t.fr;$('fMinistryEn').value=t.en}};
+$('logoFields').innerHTML=LOGOS.map(([k,l,h])=>`<div class="logo-box"><label>${l}</label><img id="lg_${k}" alt="" hidden><div class="hint" id="lgn_${k}">Aucune image</div><input type="file" accept="image/*" data-logo="${k}"><div class="hint">${h}</div><button class="danger" data-logo-rm="${k}" type="button" style="margin-top:6px">Retirer</button></div>`).join('');
+$('logoFields').addEventListener('change',async e=>{
+ const k=e.target.dataset.logo;if(!k||!e.target.files[0])return;
+ try{school[k]=await fileToLogo(e.target.files[0],k==='seal',k==='building');await saveSchool_();renderLogos();toast('Image enregistrée.')}catch(err){toast(err.message,'err')}
+ e.target.value='';
+});
+$('logoFields').addEventListener('click',async e=>{const k=e.target.dataset.logoRm;if(!k)return;school[k]='';await saveSchool_();renderLogos()});
+function renderLogos(){for(const [k] of LOGOS){const im=$('lg_'+k);im.hidden=!school[k];if(school[k])im.src=school[k];$('lgn_'+k).hidden=!!school[k]}}
+function loadSchoolForm(){
+ const m={fName:'schoolName',fMinistry:'ministry',fMinistryEn:'ministryEn',fMottoFr:'mottoFr',fMottoEn:'mottoEn',fTown:'town',fAddress:'address',fPhone:'phone',fSignatory:'signatory',fIssueDate:'issueDate',fPrimary:'primaryColor',fAccent:'accentColor'};
+ for(const id in m)$(id).value=school[m[id]]||'';
+ $('fTutelle').value=school.tutelle||'AUTRE';$('fType').value=school.schoolType||'LYCEE';$('fSigSex').value=/^(La|Mme)\b/i.test(school.signatory||'')?'f':'m';renderLogos();
+}
+$('btnSaveSchool').onclick=async()=>{
+ const name=$('fName').value.trim();if(!name)return toast('Le nom de l\u2019établissement est obligatoire.','err');
+ Object.assign(school,{schoolName:name,tutelle:$('fTutelle').value,ministry:$('fMinistry').value.trim(),ministryEn:$('fMinistryEn').value.trim(),mottoFr:$('fMottoFr').value.trim(),mottoEn:$('fMottoEn').value.trim(),
+  town:$('fTown').value.trim(),address:$('fAddress').value.trim(),phone:$('fPhone').value.trim(),signatory:$('fSignatory').value.trim(),schoolType:$('fType').value,issueDate:$('fIssueDate').value,
+  primaryColor:safeCol($('fPrimary').value,'#102b49'),accentColor:safeCol($('fAccent').value,'#d5a63b')});
+ await saveSchool_();renderTenant();toast('Paramètres enregistrés.');
+};
+
+/* ---------- rafraîchissement global ---------- */
+function refreshAll(){renderDashboard();renderClasses();refreshClassSelects();renderStudents();renderRoster();updatePrintCount();renderDatalist()}
+function refreshClassSelects(){
+ const cl=classList(),o=cl.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('');
+ for(const [id,first] of [['classFilter','Toutes les classes'],['printClass','Toutes les classes'],['rosterClass','— Choisir une classe —']]){
+  const el=$(id),old=el.value;el.innerHTML=`<option value="">${first}</option>`+o;if(cl.includes(old))el.value=old;
+ }
+ $('classOptions').innerHTML=cl.map(c=>`<option value="${esc(c)}">`).join('');
+}
+const labelOf=s=>`${s.nom} · ${s.matricule||'sans matricule'} · ${s.classe}`;
+function renderDatalist(){$('studentDatalist').innerHTML=students.map(s=>`<option value="${esc(labelOf(s))}">`).join('')}
+
+/* ---------- tableau de bord ---------- */
+function renderDashboard(){
+ const withP=students.filter(s=>s.hasPhoto).length,printed=students.filter(s=>s.printedAt).length;
+ $('dashSub').textContent=`${school.schoolName} — année ${year}`;
+ $('stStudents').textContent=students.length;$('stClasses').textContent=classList().length;$('stPhotos').textContent=withP;$('stMissing').textContent=students.length-withP;$('stPrinted').textContent=printed;
+ const rows=classList().map(c=>{const a=students.filter(s=>s.classe===c),p=a.filter(s=>s.hasPhoto).length;
+  return `<tr><td><b>${esc(c)}</b></td><td>${a.length}</td><td>${a.filter(s=>s.sexe==='Masculin').length}</td><td>${a.filter(s=>s.sexe==='Féminin').length}</td><td>${p}</td><td>${a.length-p}</td><td>${a.filter(s=>s.printedAt).length}</td></tr>`}).join('');
+ $('dashClasses').innerHTML=rows||'<tr><td colspan="7" class="empty">Aucune classe pour cette année.</td></tr>';
+ const lb=+localStorage.getItem('sc_lastBackup')||0,days=lb?Math.floor((Date.now()-lb)/864e5):null;
+ $('backupAlert').innerHTML=!lb?'<div class="notice bad"><b>Aucune sauvegarde effectuée.</b> Les données ne sont que dans ce navigateur : sauvegardez-les maintenant.</div>':days>=7?`<div class="notice"><b>Dernière sauvegarde il y a ${days} jours.</b> Pensez à en faire une nouvelle.</div>`:`<div class="notice ok">Dernière sauvegarde il y a ${days} jour(s).</div>`;
+ if(navigator.storage?.estimate)navigator.storage.estimate().then(e=>{$('storageInfo').innerHTML=`Espace utilisé par le logiciel : <b>${((e.usage||0)/1048576).toFixed(1)} Mo</b>${e.quota?' sur ~'+Math.round(e.quota/1048576)+' Mo disponibles':''}. Protection contre l\u2019effacement automatique : <b>${persisted?'activée':'non accordée par le navigateur — faites des sauvegardes régulières'}</b>.`}).catch(()=>{});
+}
+
+/* ---------- classes ---------- */
+function renderClasses(){
+ const tf=Object.assign({mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''},school.tagFields||{});
+ document.querySelectorAll('[data-tf]').forEach(i=>i.checked=!!tf[i.dataset.tf]);if($('tfExtra')&&document.activeElement!==$('tfExtra'))$('tfExtra').value=tf.extra||'';
+ const cl=classList();
+ $('classesList').innerHTML=cl.length?cl.map(c=>{
+  const n=students.filter(s=>s.classe===c).length,mode=cardMode(c);
+  return `<div class="roster-row" style="grid-template-columns:minmax(0,1fr) auto"><div style="min-width:0"><div class="roster-name">${esc(c)}</div><div class="roster-meta">${n} élève(s)</div>
+   <div style="margin-top:8px"><div class="hint" style="margin-bottom:3px">Rendu pour cette classe</div><select data-cfgmode data-name="${esc(c)}"><option value="full"${mode==='full'?' selected':''}>Carte scolaire complète</option><option value="tag"${mode==='tag'?' selected':''}>Carte OBC — photo avec date de naissance en haut et nom en bas</option></select></div></div>
+   <div class="row-actions"><button class="secondary" data-cls="rename" data-name="${esc(c)}">Renommer</button><button class="danger" data-cls="del" data-name="${esc(c)}">Supprimer</button></div></div>`}).join(''):'<div class="empty">Aucune classe. Ajoutez-en une ou importez une liste d’élèves.</div>';
+}
+$('btnAddClass').onclick=async()=>{
+ const n=$('newClassName').value.trim().replace(/\s+/g,' ').slice(0,40);if(!n)return;
+ if(classList().some(c=>norm(c)===norm(n)))return toast('Cette classe existe déjà.','err');
+ yearClasses().push(n);await saveSchool_();$('newClassName').value='';refreshAll();toast('Classe ajoutée.');
+};
+$('classesList').addEventListener('click',async e=>{
+ const b=e.target.closest('[data-cls]');if(!b)return;const name=b.dataset.name;
+ if(b.dataset.cls==='del'){
+  if(students.some(s=>s.classe===name))return toast('Cette classe contient des élèves : transférez-les ou renommez-la.','err');
+  if(!confirm(`Supprimer la classe « ${name} » ?`))return;
+  school.classes[year]=yearClasses().filter(c=>c!==name);if(school.cardCfg&&school.cardCfg[year])delete school.cardCfg[year][name];await saveSchool_();refreshAll();
+ }else{
+  const n=(prompt('Nouveau nom de la classe :',name)||'').trim().replace(/\s+/g,' ').slice(0,40);if(!n||n===name)return;
+  const moved=students.filter(s=>s.classe===name);moved.forEach(s=>s.classe=n);
+  school.classes[year]=[...new Set(yearClasses().map(c=>c===name?n:c))];if(school.cardCfg&&school.cardCfg[year]&&school.cardCfg[year][name]!==undefined){school.cardCfg[year][n]=school.cardCfg[year][name];delete school.cardCfg[year][name]}
+  await dbTx(['students','schools'],t=>{moved.forEach(s=>t.objectStore('students').put(s));t.objectStore('schools').put(school)});
+  refreshAll();toast('Classe renommée ; les élèves ont été mis à jour.');
+ }
+});
+
+$('tagBox').addEventListener('change',async e=>{
+ const t=e.target;school.tagFields=Object.assign({mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''},school.tagFields||{});
+ if(t.dataset.tf)school.tagFields[t.dataset.tf]=t.checked?1:0;else if(t.id==='tfExtra')school.tagFields.extra=t.value.trim().slice(0,60);else return;
+ await saveSchool_();toast('Contenu des photos mis à jour.');
+});
+$('classesList').addEventListener('change',async e=>{
+ const t=e.target,name=t.dataset.name;if(!name||!t.matches('[data-cfgmode]'))return;
+ school.cardCfg=school.cardCfg||{};school.cardCfg[year]=school.cardCfg[year]||{};
+ if(t.value==='tag')school.cardCfg[year][name]='tag';else delete school.cardCfg[year][name];
+ await saveSchool_();renderClasses();toast('Rendu mis à jour pour « '+name+' ».');
+});
+/* ---------- élèves ---------- */
+function statusBadge(s){return s.printedAt?'<span class="badge ok">Imprimée</span>':s.hasPhoto?'<span class="badge">Photo prête</span>':'<span class="badge warn">Sans photo</span>'}
+function studentRow(s,actions){
+ const meta=[s.matricule?'Mat. '+esc(s.matricule):'Sans matricule',esc(s.classe),esc(s.sexe||'Sexe ?'),s.dob?esc(dateFr(s.dob)):''].filter(Boolean).join(' · ');
+ return `<div class="roster-row"><img class="roster-thumb" ${s.thumb?`src="${s.thumb}"`:'style="visibility:hidden"'} alt=""><div><div class="roster-name">${esc(s.nom)}${statusBadge(s)}</div><div class="roster-meta">${meta}</div></div><div class="row-actions">${actions}</div></div>`;
+}
+function filteredStudents(){
+ const q=norm($('studentSearch').value),cl=$('classFilter').value,st=$('statusFilter').value;
+ return students.filter(s=>(!cl||s.classe===cl)&&(!q||norm(s.nom+s.matricule).includes(q))&&
+  (!st||(st==='nophoto'&&!s.hasPhoto)||(st==='photo'&&s.hasPhoto)||(st==='toprint'&&s.hasPhoto&&!s.printedAt)||(st==='printed'&&s.printedAt)))
+  .sort((a,b)=>collator.compare(a.nom,b.nom));
+}
+function renderStudents(){
+ const arr=filteredStudents(),shown=arr.slice(0,studentLimit);
+ $('studentCount').textContent=`${arr.length} élève(s)${arr.length>shown.length?' — '+shown.length+' affichés':''}`;
+ $('studentsList').innerHTML=shown.length?shown.map(s=>studentRow(s,`<button class="secondary" data-st="edit" data-id="${s.id}">Modifier</button><button class="danger" data-st="del" data-id="${s.id}">Supprimer</button>`)).join(''):'<div class="empty">Aucun élève.</div>';
+ $('btnMoreStudents').hidden=arr.length<=shown.length;
+}
+['studentSearch','classFilter','statusFilter'].forEach(id=>$(id).addEventListener('input',()=>{studentLimit=100;renderStudents()}));
+$('btnMoreStudents').onclick=()=>{studentLimit+=200;renderStudents()};
+$('studentsList').addEventListener('click',e=>{const b=e.target.closest('[data-st]');if(!b)return;const id=b.dataset.id;if(b.dataset.st==='edit')openStudentForm(id);else removeStudent(id)});
+
+function showFormPhoto(){
+ const s=students.find(x=>x.id===$('editId').value),src=formDraft?formDraft.url:(!formRemovePhoto&&s?.thumb)||'';
+ $('sPhotoImg').hidden=!src;if(src)$('sPhotoImg').src=src;$('btnFormPhotoRemove').hidden=!src;
+ $('sPhotoHint').textContent=src?(formDraft?'Nouvelle photo prête (enregistrée avec la fiche).':'Photo actuelle de l\u2019élève.'):'Photo facultative.';
+}
+function openStudentForm(id){
+ const s=id?students.find(x=>x.id===id):null;formDraft=null;formRemovePhoto=false;
+ $('studentFormTitle').textContent=s?'Modifier la fiche élève':'Nouvelle fiche élève';$('editId').value=s?s.id:'';
+ $('sName').value=s?.nom||'';$('sMatricule').value=s?.matricule||'';$('sClass').value=s?.classe||($('classFilter').value||'');$('sSex').value=s?.sexe||'';$('sDob').value=s?.dob||'';$('sBirth').value=s?.birth||'';
+ showFormPhoto();openModal('studentModal');
+}
+$('btnAddStudent').onclick=()=>openStudentForm();
+$('btnFormCam').onclick=()=>camOpen({title:'Photo de l\u2019élève',onSave:async d=>{formDraft=d;formRemovePhoto=false;showFormPhoto();return null}});
+$('sPhotoFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{formDraft=await processFile(f,{raw:false});formRemovePhoto=false;showFormPhoto()}catch(err){toast(err.message,'err')}e.target.value=''};
+$('btnFormPhotoRemove').onclick=()=>{formDraft=null;formRemovePhoto=true;showFormPhoto()};
+
+async function commitStudent(rec,draft,removePhoto){
+ if(draft){rec.hasPhoto=true;rec.thumb=draft.thumb;rec.photoUpdatedAt=Date.now();rec.printedAt=null}
+ else if(removePhoto){rec.hasPhoto=false;rec.thumb='';rec.printedAt=null}
+ await dbTx(['students','photos'],t=>{
+  t.objectStore('students').put(rec);
+  if(draft)t.objectStore('photos').put({id:rec.id,schoolId:school.id,card:draft.card,original:draft.original,updatedAt:Date.now()});
+  else if(removePhoto)t.objectStore('photos').delete(rec.id);
+ });
+ const i=students.findIndex(x=>x.id===rec.id);if(i>=0)students[i]=rec;else students.push(rec);
+ if(draft){if(draft.url)URL.revokeObjectURL(draft.url);if(draft.alt?.url)URL.revokeObjectURL(draft.alt.url)}
+}
+$('btnSaveStudent').onclick=async()=>{
+ const id=$('editId').value||uid(),old=students.find(s=>s.id===id),nom=$('sName').value.trim().replace(/\s+/g,' '),classe=$('sClass').value.trim().replace(/\s+/g,' '),matricule=$('sMatricule').value.trim(),sexe=$('sSex').value,dob=$('sDob').value;
+ if(!nom){$('sName').focus();return toast('Le nom et prénom sont obligatoires.','err')}
+ if(!classe){$('sClass').focus();return toast('La classe est obligatoire.','err')}
+ if(!sexe){$('sSex').focus();return toast('Le sexe est obligatoire (document d\u2019identité).','err')}
+ if(dob&&(toISODate(dob)===null||dob>todayISO()))return toast('Date de naissance incohérente.','err');
+ if(matricule&&students.some(x=>x.id!==id&&norm(x.matricule)===norm(matricule)))return toast('Ce matricule existe déjà dans cet établissement et cette année.','err');
+ const dup=students.find(x=>x.id!==id&&norm(x.nom)===norm(nom)&&(dob&&x.dob===dob));
+ if(dup&&!confirm(`Un élève « ${dup.nom} » né le même jour existe déjà (${dup.classe}). Enregistrer quand même ?`))return;
+ const rec={...(old||{}),id,schoolId:school.id,year,nom,matricule,classe,sexe,dob,birth:$('sBirth').value.trim()};
+ try{
+  await commitStudent(rec,formDraft,formRemovePhoto);
+  if(!yearClasses().includes(classe)&&!classList().includes(classe)){yearClasses().push(classe);await saveSchool_()}
+  closeModal('studentModal');refreshAll();toast(old?'Fiche mise à jour.':'Élève ajouté.');
+ }catch(err){toast('Échec de l\u2019enregistrement : '+err.message,'err')}
+};
+async function removeStudent(id){
+ const s=students.find(x=>x.id===id);if(!s)return;
+ if(!confirm(`Supprimer définitivement « ${s.nom} » et sa photo ?`))return;
+ await dbTx(['students','photos'],t=>{t.objectStore('students').delete(id);t.objectStore('photos').delete(id)});
+ students=students.filter(x=>x.id!==id);refreshAll();toast('Élève supprimé.');
+}
+
+/* ---------- importation Excel / CSV ---------- */
+$('btnTemplate').onclick=()=>{
+ const csv='nom;prenom;date_naissance;lieu_naissance;sexe;matricule;classe\nDUPONT;Jean;12/04/2010;Yaoundé;Masculin;2026001;6e A\n';
+ const a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));a.download='modele_liste_eleves.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),2000);
+};
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('script'));document.head.appendChild(s)})}
+async function readXlsx(buf){
+ const z=await readZip(buf),dp=new DOMParser(),dec=new TextDecoder();
+ const xml=async n=>z[n]?dp.parseFromString(dec.decode(await z[n]()),'application/xml'):null;
+ const shared=[],ss=await xml('xl/sharedStrings.xml');
+ if(ss)for(const si of ss.getElementsByTagName('si'))shared.push([...si.getElementsByTagName('t')].map(t=>t.textContent).join(''));
+ let path=null;const wb=await xml('xl/workbook.xml'),rels=await xml('xl/_rels/workbook.xml.rels');
+ const sh=wb&&wb.getElementsByTagName('sheet')[0];
+ const rid=sh&&(sh.getAttribute('r:id')||sh.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id'));
+ if(rid&&rels)for(const r of rels.getElementsByTagName('Relationship'))if(r.getAttribute('Id')===rid){const t=r.getAttribute('Target');path=t.startsWith('/')?t.slice(1):'xl/'+t.replace(/^\.\//,'')}
+ if(!path||!z[path])path=Object.keys(z).find(n=>/^xl\/worksheets\/sheet\d+\.xml$/.test(n));
+ if(!path)throw new Error('Feuille Excel introuvable');
+ const sx=await xml(path),rows=[];
+ for(const row of sx.getElementsByTagName('row')){
+  const arr=[];
+  for(const c of row.getElementsByTagName('c')){
+   const ref=(c.getAttribute('r')||'').replace(/[0-9]/g,'');let col=0;for(const ch of ref)col=col*26+ch.charCodeAt(0)-64;col=ref?col-1:arr.length;
+   const t=c.getAttribute('t');let v;
+   if(t==='inlineStr')v=[...c.getElementsByTagName('t')].map(x=>x.textContent).join('');
+   else{const ve=c.getElementsByTagName('v')[0],raw=ve?ve.textContent:'';
+    v=t==='s'?(shared[+raw]??''):t==='b'?raw==='1':(t==='str'||t==='e')?raw:raw===''?'':Number(raw)}
+   arr[col]=v;
+  }
+  rows.push(arr);
+ }
+ return rowsToObjects(rows);
+}
+async function readSheetJS(buf){
+ if(!window.XLSX){try{await loadScript('https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js')}catch(e){throw new Error('Ce fichier .xls nécessite une connexion Internet. Enregistrez-le au format .xlsx ou .csv depuis Excel, puis réessayez.')}}
+ const wb=XLSX.read(buf,{type:'array',cellDates:true});return XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{defval:'',raw:true});
+}
+async function readFileRows(file){
+ const buf=await file.arrayBuffer(),name=file.name.toLowerCase();
+ if(/\.(csv|txt)$/.test(name)){let text;try{text=new TextDecoder('utf-8',{fatal:true}).decode(buf)}catch(e){text=new TextDecoder('windows-1252').decode(buf)}return parseCSV(text)}
+ if(name.endsWith('.xlsx')){try{return await readXlsx(buf)}catch(e){if(e.message!=='NO_DECOMPRESS')console.warn(e);return readSheetJS(buf)}}
+ return readSheetJS(buf);
+}
+$('excelFile').onchange=async e=>{
+ const f=e.target.files[0];if(!f)return;
+ try{
+  toast('Analyse du fichier…');
+  const parsed=parseStudentRows(await readFileRows(f));
+  if(parsed.missing){$('importPreview').innerHTML=`<div class="notice bad"><b>Colonne « nom » introuvable.</b> Colonnes détectées : ${esc(parsed.keys.join(', ')||'aucune')}. Utilisez le modèle CSV.</div>`;return}
+  stageImport(parsed.records);
+ }catch(err){$('importPreview').innerHTML=`<div class="notice bad">${esc(err.message)}</div>`}
+ e.target.value='';
+};
+function stageImport(records){
+ const seenMat=new Map(),seenKey=new Map();
+ const rows=records.map(r=>{
+  const x={...r,issues:[...r.issues],status:'new',existing:null};
+  if(r.fatal){x.status='error';return x}
+  const mk=norm(r.matricule),nk=norm(r.nom)+'|'+norm(r.classe);
+  if(mk&&seenMat.has(mk)){x.status='error';x.issues.push(`Matricule en double avec la ligne ${seenMat.get(mk)}`);return x}
+  if(!mk&&seenKey.has(nk)){x.status='error';x.issues.push(`Doublon (même nom et classe) avec la ligne ${seenKey.get(nk)}`);return x}
+  if(mk)seenMat.set(mk,r.line);else seenKey.set(nk,r.line);
+  x.existing=students.find(s=>(mk&&norm(s.matricule)===mk)||(!mk&&norm(s.nom)===norm(r.nom)&&norm(s.classe)===norm(r.classe)))||null;
+  if(x.existing)x.status='update';
+  else if(r.dob&&students.some(s=>norm(s.nom)===norm(r.nom)&&s.dob===r.dob))x.issues.push('Possible doublon d\u2019un élève existant');
+  return x;
+ });
+ importStage=rows;
+ const n=s=>rows.filter(r=>r.status===s).length,warn=rows.filter(r=>r.status!=='error'&&r.issues.length).length;
+ $('importPreview').innerHTML=`<div class="notice ${n('error')?'':'ok'}"><b>${rows.length} ligne(s) lue(s)</b> — ${n('new')} nouvel(aux), ${n('update')} mise(s) à jour, ${n('error')} rejetée(s), ${warn} avec avertissement.</div>
+ <div class="tablebox"><table><thead><tr><th>Ligne</th><th>Statut</th><th>Nom</th><th>Matricule</th><th>Classe</th><th>Naissance</th><th>Sexe</th><th>Remarques</th></tr></thead><tbody>${rows.slice(0,300).map(r=>`<tr><td>${r.line}</td><td><span class="badge ${r.status==='error'?'err':r.status==='update'?'warn':'ok'}">${r.status==='error'?'Rejetée':r.status==='update'?'Mise à jour':'Nouveau'}</span></td><td>${esc(r.nom)}</td><td>${esc(r.matricule)}</td><td>${esc(r.classe)}</td><td>${esc(dateFr(r.dob))}</td><td>${esc(r.sexe)}</td><td>${esc(r.issues.join(' ; '))}</td></tr>`).join('')}</tbody></table></div>
+ ${rows.length>300?'<div class="hint">Aperçu limité aux 300 premières lignes ; toutes les lignes valides seront importées.</div>':''}
+ <div class="actions"><button id="btnConfirmImport" ${n('new')+n('update')?'':'disabled'}>Importer ${n('new')+n('update')} ligne(s) valide(s)</button><button class="secondary" id="btnCancelImport">Annuler</button></div>`;
+ $('btnConfirmImport').onclick=confirmImport;$('btnCancelImport').onclick=()=>{importStage=null;$('importPreview').innerHTML=''};
+}
+async function confirmImport(){
+ if(!importStage)return;let added=0,updated=0;const out=[];
+ for(const r of importStage){
+  if(r.status==='error')continue;
+  if(r.status==='update'){const o=r.existing;out.push({...o,nom:r.nom,classe:r.classe,matricule:r.matricule||o.matricule,sexe:r.sexe||o.sexe,dob:r.dob||o.dob,birth:r.birth||o.birth});updated++}
+  else{out.push({id:uid(),schoolId:school.id,year,nom:r.nom,matricule:r.matricule,classe:r.classe,sexe:r.sexe,dob:r.dob,birth:r.birth,hasPhoto:false,thumb:'',printedAt:null});added++}
+ }
+ try{
+  const known=new Set(classList());let newCls=false;out.forEach(s=>{if(!known.has(s.classe)){yearClasses().push(s.classe);known.add(s.classe);newCls=true}});
+  await dbTx(['students','schools'],t=>{out.forEach(s=>t.objectStore('students').put(s));if(newCls)t.objectStore('schools').put(school)});
+  await reloadStudents();importStage=null;$('importPreview').innerHTML='';refreshAll();toast(`${added} ajouté(s), ${updated} mis à jour.`);
+ }catch(err){toast('Échec de l\u2019importation : '+err.message,'err')}
+}
+
+/* ---------- photos : import en lot ---------- */
+function stemOf(n){return n.replace(/\.[^.]+$/,'')}
+$('btnImportPhotos').onclick=async()=>{
+ const files=[...$('photoFiles').files].filter(f=>f.type.startsWith('image/')||/\.(jpe?g|png|webp)$/i.test(f.name));
+ if(!files.length)return toast('Sélectionnez des photos.','err');
+ const replace=$('photoReplace').checked,byMat=new Map(),byName=new Map();
+ students.forEach(s=>{if(s.matricule)byMat.set(norm(s.matricule),s);const k=norm(s.nom);byName.set(k,[...(byName.get(k)||[]),s])});
+ let linked=0,skipped=0,failed=0;pendingPhotos=[];
+ for(let i=0;i<files.length;i++){
+  const f=files[i],stem=stemOf(f.name),key=norm(stem);let target=byMat.get(key)||null,cands=[];
+  if(!target){const ex=byName.get(key)||[];if(ex.length===1)target=ex[0];else if(ex.length>1)cands=ex}
+  if(!target&&!cands.length){
+   const tokens=stem.split(/[^A-Za-z0-9\u00C0-\u00FF]+/).map(norm).filter(t=>t.length>=2);
+   if(tokens.length>=2){const c=students.filter(s=>tokens.every(t=>norm(s.nom).includes(t)));if(c.length===1)target=c[0];else if(c.length>1)cands=c}
+  }
+  if(!target){pendingPhotos.push({file:f,cands});continue}
+  if(target.hasPhoto&&!replace){skipped++;continue}
+  $('photoMessage').textContent=`Traitement ${i+1}/${files.length}…`;
+  try{await commitStudent(target,await processFile(f,{raw:false}))}catch(err){failed++;console.warn(err)}
+  linked++;
+ }
+ refreshAll();
+ $('photoMessage').textContent=`${linked} photo(s) associée(s) automatiquement. ${skipped} ignorée(s) (photo déjà présente). ${pendingPhotos.length} à vérifier ci-dessous. ${failed?failed+' illisible(s).':''}`;
+ renderReview();$('photoFiles').value='';
+};
+function renderReview(){
+ $('photoReview').innerHTML=pendingPhotos.length?'<h3 style="margin:18px 0 0">À vérifier manuellement</h3>'+pendingPhotos.map((p,i)=>`<div class="review-row"><div><b>${esc(p.file.name)}</b><div class="hint">${p.cands.length?'Plusieurs élèves possibles — choisissez :':'Aucun élève reconnu — tapez le nom ou le matricule :'}</div></div>${p.cands.length?`<select data-i="${i}">${p.cands.map(s=>`<option value="${s.id}">${esc(labelOf(s))}</option>`).join('')}</select>`:`<input list="studentDatalist" data-i="${i}" placeholder="Nom ou matricule">`}<div class="actions" style="margin:0"><button data-rv="ok" data-i="${i}">Associer</button><button class="secondary" data-rv="skip" data-i="${i}">Ignorer</button></div></div>`).join(''):'';
+}
+function studentFromInput(v){const t=String(v||'').trim();return students.find(s=>labelOf(s)===t)||students.find(s=>s.id===t)||students.find(s=>norm(s.matricule)&&norm(s.matricule)===norm(t))||null}
+$('photoReview').addEventListener('click',async e=>{
+ const b=e.target.closest('[data-rv]');if(!b)return;const i=+b.dataset.i,p=pendingPhotos[i];if(!p)return;
+ if(b.dataset.rv==='skip'){pendingPhotos.splice(i,1);return renderReview()}
+ const ctl=b.closest('.review-row').querySelector('[data-i]');const s=ctl.tagName==='SELECT'?students.find(x=>x.id===ctl.value):studentFromInput(ctl.value);
+ if(!s)return toast('Élève non reconnu : choisissez dans la liste proposée.','err');
+ if(s.hasPhoto&&!confirm(`${s.nom} a déjà une photo. La remplacer ?`))return;
+ try{await commitStudent(s,await processFile(p.file,{raw:false}));pendingPhotos.splice(i,1);renderReview();refreshAll();toast('Photo associée à '+s.nom)}catch(err){toast(err.message,'err')}
+});
+$('btnAssignOne').onclick=async()=>{
+ const s=studentFromInput($('onePhotoStudent').value),f=$('onePhoto').files[0];
+ if(!s||!f)return toast('Choisissez un élève dans la liste proposée et une photo.','err');
+ try{await commitStudent(s,await processFile(f,{raw:false}));refreshAll();$('onePhoto').value='';$('onePhotoStudent').value='';toast('Photo associée à '+s.nom)}catch(err){toast(err.message,'err')}
+};
+$('btnExportPhotos').onclick=async()=>{
+ const withP=students.filter(s=>s.hasPhoto);if(!withP.length)return toast('Aucune photo à exporter.','err');
+ toast('Préparation de l\u2019archive…');const files=[],used=new Set();
+ for(const s of withP){const p=await dbGet('photos',s.id);if(!p)continue;let base=(s.matricule||s.nom).replace(/[^A-Za-z0-9_\-]+/g,'_').slice(0,60)||s.id;while(used.has(base))base+='_'+s.id.slice(0,4);used.add(base);
+  files.push({name:`${(s.classe||'classe').replace(/[^A-Za-z0-9_\-]+/g,'_')}/${base}.jpg`,data:new Uint8Array(await p.card.arrayBuffer())})}
+ download(zipBlob(files),`photos_${(school.schoolName||'ecole').replace(/[^A-Za-z0-9]+/g,'_')}_${year.replace('/','-')}.zip`);
+};
+function download(blob,name){const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),4000)}
+
+/* ---------- caméra (fenêtre commune) ---------- */
+const Cam={stream:null,facing:isMobile?'environment':'user',ctx:null,draft:null,busy:false};
+function camStop(){if(Cam.stream)Cam.stream.getTracks().forEach(t=>t.stop());Cam.stream=null;$('camVideo').srcObject=null}
+function camLive(){
+ $('camTitle').textContent=Cam.ctx.title;$('camPreviewBox').hidden=true;$('camReview').hidden=true;$('camLive').hidden=false;
+ $('camStage').hidden=!Cam.stream;$('camShot').disabled=!Cam.stream;$('camFlip').hidden=!Cam.stream;
+}
+function placeGuide(){
+ const v=$('camVideo'),vw=v.videoWidth,vh=v.videoHeight;if(!vw)return;
+ $('camStage').style.width=`min(100%,${Math.round(62*vw/vh*10)/10}vh)`;
+ const r=cropRect(vw,vh,null,.5),g=$('camGuide');
+ g.style.left=r.x/vw*100+'%';g.style.top=r.y/vh*100+'%';g.style.width=r.w/vw*100+'%';g.style.height=r.h/vh*100+'%';
+}
+async function camStart(){
+ camStop();
+ if(!navigator.mediaDevices?.getUserMedia){$('camInfo').textContent='Caméra intégrée indisponible dans ce contexte. Utilisez « Appareil photo du téléphone » ou « Galerie ».';return camLive()}
+ try{
+  Cam.stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:Cam.facing},width:{ideal:1920},height:{ideal:1080}},audio:false});
+  const v=$('camVideo');v.srcObject=Cam.stream;v.classList.toggle('mirror',Cam.facing==='user');
+  try{await Cam.stream.getVideoTracks()[0].applyConstraints({advanced:[{focusMode:'continuous'},{exposureMode:'continuous'},{whiteBalanceMode:'continuous'}]})}catch(e){}
+  await v.play().catch(()=>{});if(!v.videoWidth)await new Promise(r=>{v.onloadedmetadata=r});
+  placeGuide();$('camInfo').textContent='Placez le visage dans le cadre jaune, lumière de face.';
+ }catch(err){Cam.stream=null;$('camInfo').textContent=`Caméra inaccessible (${err.name}). Autorisez l\u2019accès, ou utilisez « Appareil photo du téléphone ».`}
+ camLive();
+}
+async function camOpen(ctx){Cam.ctx=ctx;Cam.draft=null;openModal('camModal');camLive();await camStart()}
+function camClose(){camStop();revokeDraft(Cam.draft);Cam.draft=null;closeModal('camModal')}
+function revokeDraft(d){if(!d)return;if(d.url)URL.revokeObjectURL(d.url);if(d.alt?.url)URL.revokeObjectURL(d.alt.url)}
+function camModeText(d){$('camMode').textContent=d.enhanced?'✨ Version améliorée automatiquement (sera enregistrée)':'Version brute, sans amélioration (sera enregistrée)'}
+function camQuality(d){
+ const rows=(d.quality?qualityLabels(d.quality):[]).map(([t,m])=>`<div class="qrow ${t==='ok'?'ok':t==='err'?'bad':''}">${esc(m)}</div>`);
+ if(d.info){rows.push(`<div class="hint">Cadrage : ${esc(d.info.framing)}${d.info.bg?' · fond uniforme '+esc(d.info.bg):''}</div>`)}
+ $('camQ').innerHTML=rows.join('');
+}
+function camReview(d){
+ revokeDraft(Cam.draft);Cam.draft=d;$('camPreview').src=d.url;camModeText(d);camQuality(d);$('camCompare').hidden=!d.alt;
+ $('camStage').hidden=true;$('camLive').hidden=true;$('camPreviewBox').hidden=false;$('camReview').hidden=false;
+}
+$('camClose').onclick=camClose;
+$('camFlip').onclick=async()=>{Cam.facing=Cam.facing==='user'?'environment':'user';await camStart()};
+$('camShot').onclick=async()=>{
+ const v=$('camVideo');if(!v.videoWidth)return toast('La caméra n\u2019est pas encore prête.','err');
+ const b=$('camShot');b.disabled=true;
+ try{
+  /* rafale de 3 images : on garde la plus nette (évite flou de bougé et clignements) */
+  const frames=[];
+  for(let i=0;i<3;i++){const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);frames.push(c);if(i<2)await new Promise(r=>setTimeout(r,110))}
+  let best=frames[0],bs=-1;for(const f of frames){const q=frameSharpness(f);if(q>bs){bs=q;best=f}}
+  camReview(await processPortrait(best,best.width,best.height,.5));
+ }catch(err){toast('Capture impossible : '+err.message,'err')}
+ finally{b.disabled=false}
+};
+for(const id of ['camNative','camGallery'])$(id).onchange=async e=>{
+ const f=e.target.files[0];e.target.value='';if(!f)return;
+ try{camReview(await processFile(f))}catch(err){toast(err.message,'err')}
+};
+$('camRetake').onclick=()=>{revokeDraft(Cam.draft);Cam.draft=null;camLive();if(!Cam.stream)camStart()};
+$('camCompare').onclick=()=>{
+ const d=Cam.draft;if(!d||!d.alt)return;
+ const m={card:d.card,thumb:d.thumb,url:d.url,enhanced:d.enhanced};
+ d.card=d.alt.card;d.thumb=d.alt.thumb;d.url=d.alt.url;d.enhanced=d.alt.enhanced;d.alt=m;
+ $('camPreview').src=d.url;camModeText(d);
+};
+
+$('camOk').onclick=async()=>{
+ const d=Cam.draft;if(!d||Cam.busy)return;Cam.busy=true;
+ try{
+  const next=await Cam.ctx.onSave(d);Cam.draft=null;
+  if(next){Cam.ctx=next;Cam.draft=null;camLive();$('camInfo').textContent='✓ Photo enregistrée. Élève suivant : placez le visage dans le cadre.';if(!Cam.stream)await camStart()}
+  else camClose();
+ }catch(err){toast('Enregistrement impossible : '+err.message,'err')}
+ finally{Cam.busy=false}
+};
+
+/* ---------- prise de photos par classe ---------- */
+function rosterStudents(){
+ const cl=$('rosterClass').value,q=norm($('rosterSearch').value);
+ return students.filter(s=>s.classe===cl&&(!q||norm(s.nom+s.matricule).includes(q))).sort((a,b)=>collator.compare(a.nom,b.nom));
+}
+function renderRoster(){
+ const cl=$('rosterClass').value,all=students.filter(s=>s.classe===cl),done=all.filter(s=>s.hasPhoto).length;
+ $('rosterTotal').textContent=cl?all.length:0;$('rosterDone').textContent=cl?done:0;$('rosterMissing').textContent=cl?all.length-done:0;
+ if(!cl){$('rosterList').innerHTML='<div class="empty">Choisissez une classe pour afficher les élèves.</div>';return}
+ const arr=rosterStudents();
+ $('rosterList').innerHTML=arr.length?arr.map(s=>studentRow(s,`<button class="camera-btn" data-ro="cam" data-id="${s.id}" aria-label="Photographier ${esc(s.nom)}">📷 ${s.hasPhoto?'Refaire':'Photo'}</button>${s.hasPhoto?`<button class="secondary" data-ro="rm" data-id="${s.id}" aria-label="Retirer la photo">✕</button>`:''}`)).join(''):'<div class="empty">Aucun élève.</div>';
+}
+['rosterClass','rosterSearch'].forEach(id=>$(id).addEventListener('input',renderRoster));
+function rosterCtx(id){
+ const s=students.find(x=>x.id===id);
+ return{studentId:id,title:`📷 ${s.nom} — ${s.classe}`,onSave:async d=>{
+  await commitStudent(s,d);renderRoster();refreshStatsOnly();
+  if(!$('rosterAuto').checked)return null;
+  const nxt=nextMissing(id);if(!nxt){toast('Tous les élèves de la classe ont une photo.');return null}
+  return rosterCtx(nxt);
+ }};
+}
+function refreshStatsOnly(){renderDashboard();updatePrintCount()}
+function nextMissing(afterId){
+ const list=rosterStudents(),i=list.findIndex(s=>s.id===afterId);
+ const order=[...list.slice(i+1),...list.slice(0,Math.max(i,0))];
+ return(order.find(s=>!s.hasPhoto&&s.id!==afterId)||{}).id||null;
+}
+$('rosterList').addEventListener('click',async e=>{
+ const b=e.target.closest('[data-ro]');if(!b)return;const id=b.dataset.id;
+ if(b.dataset.ro==='cam')camOpen(rosterCtx(id));
+ else{const s=students.find(x=>x.id===id);if(s&&confirm(`Retirer la photo de ${s.nom} ?`)){await commitStudent(s,null,true);renderRoster();refreshStatsOnly()}}
+});
+$('btnRosterStart').onclick=()=>{
+ if(!$('rosterClass').value)return toast('Choisissez d\u2019abord une classe.','err');
+ const f=rosterStudents().find(s=>!s.hasPhoto);if(!f)return toast('Tous les élèves de cette classe ont déjà une photo.');
+ camOpen(rosterCtx(f.id));
+};
+
+/* ---------- impression ---------- */
+function selectedStudents(){
+ const cl=$('printClass').value,inc=$('includeNoPhoto').checked,onlyNew=$('onlyUnprinted').checked;
+ const a=students.filter(s=>(!cl||s.classe===cl)&&(inc||s.hasPhoto)&&(!onlyNew||!s.printedAt));
+ return a.sort($('sortOrder').value==='matricule'?(x,y)=>collator.compare(x.matricule||'',y.matricule||'')||collator.compare(x.nom,y.nom):(x,y)=>collator.compare(x.classe,y.classe)||collator.compare(x.nom,y.nom));
+}
+function updatePrintCount(){
+ const cl=$('printClass').value,n=selectedStudents().length;
+ $('printCount').textContent=n;$('printPages').textContent=Math.ceil(n/cardsPerPage());
+ $('printMissingCount').textContent=students.filter(s=>(!cl||s.classe===cl)&&!s.hasPhoto).length;
+}
+['printClass','sortOrder','includeNoPhoto','onlyUnprinted','cardFormat'].forEach(id=>$(id).addEventListener('change',updatePrintCount));
+/* ===== Générateur de QR code (mode octets, correction M, versions 1-10) — sans dépendance ===== */
+const QR=(()=>{
+ const EXP=new Uint8Array(512),LOG=new Uint8Array(256);
+ for(let i=0,x=1;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11D}
+ for(let i=255;i<512;i++)EXP[i]=EXP[i-255];
+ const mul=(a,b)=>a&&b?EXP[LOG[a]+LOG[b]]:0;
+ const genPoly=n=>{let g=[1];for(let i=0;i<n;i++){const ng=new Array(g.length+1).fill(0);for(let j=0;j<g.length;j++){ng[j]^=g[j];ng[j+1]^=mul(g[j],EXP[i])}g=ng}return g};
+ const rs=(data,n)=>{const g=genPoly(n),r=new Array(n).fill(0);for(const b of data){const f=b^r.shift();r.push(0);if(f)for(let i=0;i<n;i++)r[i]^=mul(g[i+1],f)}return r};
+ /* [ec par bloc, [nb blocs, mots de données]...] — niveau M */
+ const BL={1:[10,[1,16]],2:[16,[1,28]],3:[26,[1,44]],4:[18,[2,32]],5:[24,[2,43]],6:[16,[4,27]],7:[18,[4,31]],8:[22,[2,38],[2,39]],9:[22,[3,36],[2,37]],10:[26,[4,43],[1,44]]};
+ const ALIGN={1:[],2:[6,18],3:[6,22],4:[6,26],5:[6,30],6:[6,34],7:[6,22,38],8:[6,24,42],9:[6,26,46],10:[6,28,50]};
+ const dataCap=v=>BL[v].slice(1).reduce((a,[n,k])=>a+n*k,0);
+ function formatBits(mask){const d=(0<<3)|mask;/* M = 00 */let r=d<<10;for(let i=14;i>=10;i--)if(r>>i&1)r^=0x537<<(i-10);return((d<<10)|r)^0x5412}
+ function versionBits(v){let r=v<<12;for(let i=17;i>=12;i--)if(r>>i&1)r^=0x1F25<<(i-12);return(v<<12)|r}
+ function encode(text){
+  const bytes=[...new TextEncoder().encode(text)];
+  let v=1;while(v<=10&&dataCap(v)-2<bytes.length)v++;
+  if(v>10)return null;
+  const bits=[],put=(val,n)=>{for(let i=n-1;i>=0;i--)bits.push(val>>i&1)};
+  put(4,4);put(bytes.length,8);bytes.forEach(b=>put(b,8));
+  const cap=dataCap(v)*8;put(0,Math.min(4,cap-bits.length));while(bits.length%8)bits.push(0);
+  const cw=[];for(let i=0;i<bits.length;i+=8){let b=0;for(let j=0;j<8;j++)b=b<<1|bits[i+j];cw.push(b)}
+  for(let p=0;cw.length<dataCap(v);p^=1)cw.push(p?0x11:0xEC);
+  const [ecn,...groups]=BL[v],blocks=[];let o=0;
+  for(const [n,k] of groups)for(let i=0;i<n;i++){blocks.push(cw.slice(o,o+k));o+=k}
+  const ecs=blocks.map(b=>rs(b,ecn)),out=[],maxk=Math.max(...blocks.map(b=>b.length));
+  for(let i=0;i<maxk;i++)blocks.forEach(b=>{if(i<b.length)out.push(b[i])});
+  for(let i=0;i<ecn;i++)ecs.forEach(e=>out.push(e[i]));
+  return{v,words:out};
+ }
+ function build(v,words,mask){
+  const N=17+4*v,M=Array.from({length:N},()=>new Int8Array(N).fill(-1)),F=Array.from({length:N},()=>new Uint8Array(N));
+  const set=(r,c,val,fn=true)=>{if(r<0||c<0||r>=N||c>=N)return;M[r][c]=val;if(fn)F[r][c]=1};
+  const finder=(r,c)=>{for(let i=-1;i<=7;i++)for(let j=-1;j<=7;j++){const on=i>=0&&i<=6&&j>=0&&j<=6&&(i===0||i===6||j===0||j===6||(i>=2&&i<=4&&j>=2&&j<=4));set(r+i,c+j,on?1:0)}};
+  finder(0,0);finder(0,N-7);finder(N-7,0);
+  for(let i=8;i<N-8;i++){set(6,i,i%2?0:1);set(i,6,i%2?0:1)}
+  const al=ALIGN[v];
+  for(const r of al)for(const c of al){if((r===6&&c===6)||(r===6&&c===al[al.length-1])||(c===6&&r===al[al.length-1]))continue;
+   for(let i=-2;i<=2;i++)for(let j=-2;j<=2;j++)set(r+i,c+j,Math.max(Math.abs(i),Math.abs(j))===1?0:1)}
+  set(N-8,8,1);
+  for(let i=0;i<=8;i++){F[8][i]=1;F[i][8]=1}
+  for(let i=0;i<8;i++){F[8][N-1-i]=1;F[N-1-i][8]=1}
+  if(v>=7){const vb=versionBits(v);for(let i=0;i<18;i++){const b=vb>>i&1,a=Math.floor(i/3),c=N-11+i%3;set(a,c,b);set(c,a,b)}}
+  /* placement des données en zigzag */
+  const bits=[];words.forEach(w=>{for(let i=7;i>=0;i--)bits.push(w>>i&1)});
+  const rem={1:0,7:0,8:0,9:0,10:0};const extra=(rem[v]===undefined?7:rem[v]);for(let i=0;i<extra;i++)bits.push(0);
+  const maskFn=[(r,c)=>(r+c)%2===0,(r)=>r%2===0,(r,c)=>c%3===0,(r,c)=>(r+c)%3===0,(r,c)=>(Math.floor(r/2)+Math.floor(c/3))%2===0,(r,c)=>(r*c)%2+(r*c)%3===0,(r,c)=>((r*c)%2+(r*c)%3)%2===0,(r,c)=>((r+c)%2+(r*c)%3)%2===0][mask];
+  let k=0,up=true;
+  for(let c=N-1;c>0;c-=2){if(c===6)c--;
+   for(let t=0;t<N;t++){const r=up?N-1-t:t;
+    for(let d=0;d<2;d++){const cc=c-d;if(F[r][cc])continue;let b=k<bits.length?bits[k]:0;k++;if(maskFn(r,cc))b^=1;M[r][cc]=b}}
+   up=!up}
+  const fb=formatBits(mask),put=(r,c,b)=>{M[r][c]=b};
+  for(let i=0;i<15;i++){const b=fb>>i&1;
+   if(i<6)put(i,8,b);else if(i===6)put(7,8,b);else if(i===7)put(8,8,b);else if(i===8)put(8,7,b);else put(8,14-i,b);
+   if(i<8)put(8,N-1-i,b);else put(N-15+i,8,b);
+  }
+  M[N-8][8]=1;
+  return M;
+ }
+ function penalty(M){
+  const N=M.length;let p=0;
+  for(let pass=0;pass<2;pass++)for(let a=0;a<N;a++){let run=1;
+   for(let b=1;b<N;b++){const x=pass?M[b][a]:M[a][b],y=pass?M[b-1][a]:M[a][b-1];if(x===y){run++;if(run===5)p+=3;else if(run>5)p++}else run=1}}
+  for(let r=0;r<N-1;r++)for(let c=0;c<N-1;c++){const s=M[r][c];if(s===M[r][c+1]&&s===M[r+1][c]&&s===M[r+1][c+1])p+=3}
+  const pat=[1,0,1,1,1,0,1,0,0,0,0],pat2=[...pat].reverse();
+  for(let pass=0;pass<2;pass++)for(let a=0;a<N;a++)for(let b=0;b<=N-11;b++){
+   let m1=true,m2=true;for(let i=0;i<11;i++){const x=pass?M[b+i][a]:M[a][b+i];if(x!==pat[i])m1=false;if(x!==pat2[i])m2=false}if(m1)p+=40;if(m2)p+=40}
+  let dark=0;for(let r=0;r<N;r++)for(let c=0;c<N;c++)dark+=M[r][c];
+  p+=Math.floor(Math.abs(dark*100/(N*N)-50)/5)*10;return p;
+ }
+ function matrix(text){
+  const e=encode(text);if(!e)return null;
+  let best=null,bp=1e9;
+  for(let m=0;m<8;m++){const M=build(e.v,e.words,m),p=penalty(M);if(p<bp){bp=p;best=M}}
+  return{size:best.length,get:(r,c)=>best[r][c]===1};
+ }
+ function svg(text,dark='#000'){
+  const q=matrix(text);if(!q)return '';
+  let d='';for(let r=0;r<q.size;r++){let c=0;while(c<q.size){if(q.get(r,c)){let s=c;while(c<q.size&&q.get(r,c))c++;d+=`M${s} ${r}h${c-s}v1h${-(c-s)}z`}else c++}}
+  return `<svg viewBox="0 0 ${q.size} ${q.size}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg"><path d="${d}" fill="${dark}"/></svg>`;
+ }
+ return{matrix,svg};
+})();
+
+/* ===== Carte d'identité scolaire — rendu d'après le modèle ===== */
+const FORMATS={ref32:{w:96,h:64,sc:1,perPage:8},cr80:{w:85.6,h:54,sc:.84375,perPage:10},'96':{w:96,h:54,sc:.84375,perPage:10}};
+const curFmt=()=>FORMATS[$('cardFormat').value]||FORMATS.ref32;
+function applyFormat(el){const f=curFmt();el.style.setProperty('--cw',f.w+'mm');el.style.setProperty('--ch',f.h+'mm');el.style.setProperty('--sc',String(f.sc));el.classList.toggle('no-outline',!$('cutMarks').checked)}
+function cardsPerPage(){return curFmt().perPage}
+function starPts(cx,cy,R,r){const p=[];for(let i=0;i<10;i++){const a=-Math.PI/2+i*Math.PI/5,q=i%2?r:R;p.push((cx+q*Math.cos(a)).toFixed(2)+','+(cy+q*Math.sin(a)).toFixed(2))}return p.join(' ')}
+const FLAG_SVG=`<svg class="flag" viewBox="0 0 18 13.4" preserveAspectRatio="none" aria-hidden="true"><polygon fill="#0a8a45" points="0,0 5.2,0 0,11.8"/><polygon fill="#cf2434" points="5.2,0 12.6,0 6.7,13.4 0,13.4 0,11.8"/><polygon fill="#f5cc32" points="12.6,0 17,0 11.1,13.4 6.7,13.4"/><polygon fill="#f5cc32" points="${starPts(5.6,7.3,1.9,.78)}"/></svg>`;
+const WAVES=(()=>{let d='';for(let k=0;k<11;k++){const y=14+k*5;d+=`<path d="M0 ${y}C20 ${y-5} 40 ${y+5} 60 ${y-2}S90 ${y+3} 96 ${y-1}"/>`}return `<svg class="wave" viewBox="0 0 96 64" preserveAspectRatio="none" aria-hidden="true"><g fill="none" stroke="#8fb8e0" stroke-width=".16" opacity=".55">${d}</g></svg>`})();
+const SWOOSH='<svg class="swoosh" viewBox="0 0 42 2" preserveAspectRatio="none" aria-hidden="true"><path d="M0 1.5Q21 -.3 42 1.1Q21 .5 0 1.5Z" fill="#0a8a45"/><path d="M2 1.8Q21 .2 40 1.35Q21 .9 2 1.8Z" fill="#f5cc32"/><path d="M6 2Q21 .6 36 1.6Q21 1.2 6 2Z" fill="#cf2434"/></svg>';
+const SILHOUETTE='<svg viewBox="0 0 40 46" preserveAspectRatio="xMidYMid slice"><rect width="40" height="46" fill="#dfe8f1"/><circle cx="20" cy="17" r="8" fill="#a9b9cb"/><path d="M4 46c1-11 8-15 16-15s15 4 16 15z" fill="#a9b9cb"/></svg>';
+const IC={
+ user:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4.2"/><path d="M3.5 21c.6-4.6 4-7 8.5-7s7.9 2.4 8.5 7z"/></svg>',
+ cal:'<svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M5 4h14a2 2 0 0 1 2 2v13a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm0 5v10h14V9zM7 2h2v4H7zm8 0h2v4h-2z"/><circle cx="8" cy="12.6" r="1.3"/><circle cx="12" cy="12.6" r="1.3"/><circle cx="16" cy="12.6" r="1.3"/><circle cx="8" cy="16.2" r="1.3"/><circle cx="12" cy="16.2" r="1.3"/></svg>',
+ male:'<svg class="st" viewBox="0 0 24 24"><circle cx="10" cy="14" r="5.2"/><path d="M13.8 10.2 20 4m0 0h-5m5 0v5"/></svg>',
+ female:'<svg class="st" viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="5.2"/><path d="M12 13.7V21m-3.4-3.4h6.8"/></svg>',
+ id:'<svg viewBox="0 0 24 24"><path fill-rule="evenodd" d="M4 5h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zm0 2v10h16V7z"/><circle cx="8.6" cy="10.6" r="2"/><path d="M5.4 16c.3-1.8 1.5-2.6 3.2-2.6s2.9.8 3.2 2.6zM13 9.2h5v1.6h-5zm0 3h5v1.6h-5z"/></svg>',
+ cap:'<svg viewBox="0 0 24 24"><path d="M12 3 1 9l11 6 9-4.9V16h2V9zM5 13.2v3.6c0 1.6 3.1 3.2 7 3.2s7-1.6 7-3.2v-3.6l-7 3.8z"/></svg>'
+};
+function pngRatio(u){try{if(!/^data:image\/png;base64,/.test(u||''))return 1;const b=atob(u.slice(22,66)),g=i=>b.charCodeAt(i),w=(g(16)<<24)|(g(17)<<16)|(g(18)<<8)|g(19),h=(g(20)<<24)|(g(21)<<16)|(g(22)<<8)|g(23);return h?w/h:1}catch(e){return 1}}
+function qrText(s){const enc=new TextEncoder(),mk=t=>`SCP|${s.matricule||''}|${t}|${year}`;let nom=String(s.nom||'');while(enc.encode(mk(nom)).length>80&&nom.length>3)nom=nom.slice(0,-1);return mk(nom)}
+const CARD_FULL={dob:1,lieu:1,sexe:1,mat:1,cls:1,code:0};
+function cardMode(classe){const v=school.cardCfg&&school.cardCfg[year]&&school.cardCfg[year][classe];return v==='tag'?'tag':'full'}
+const TAG_DEF={mat:1,lieu:0,classe:0,sexe:0,ecole:0,extra:''};
+function tagLines(s){
+ const f=Object.assign({},TAG_DEF,school.tagFields||{}),L=[String(s.nom||'')];
+ if(f.mat)L.push(String(s.matricule||''));
+ if(f.lieu&&s.birth)L.push('Né(e) à '+s.birth);
+ if(f.classe&&s.classe)L.push(s.classe);
+ if(f.sexe&&s.sexe)L.push(s.sexe);
+ if(f.ecole&&school.schoolName)L.push(school.schoolName);
+ if(f.extra)L.push(String(f.extra));
+ return L.filter(x=>x!=='').slice(0,6);
+}
+function obcPhoto(photo,s){
+ const L=tagLines(s).slice(0,4),bh=(L.length*1.75+.9).toFixed(2);
+ return `<div class="op" style="bottom:${bh}mm">${photo}</div><div class="dt">${s.dob?esc(dateFr(s.dob)):''}</div><div class="bd" style="height:${bh}mm">${L.map((t,i)=>`<b class="fit" data-fs="${i<2?4.4:3.8}">${esc(t)}</b>`).join('')}</div>`;
+}
+function tagHTML(s,photoUrl){
+ const photo=photoUrl?`<img src="${photoUrl}" alt="Photo de ${esc(s.nom)}">`:SILHOUETTE,L=tagLines(s),bh=(L.length*3.5+2.2).toFixed(1);
+ return `<article class="ptag"><div class="ph">${photo}<div class="dt">${s.dob?esc(dateFr(s.dob)):''}</div></div><div class="bd" style="height:${bh}mm">${L.map((t,i)=>`<b class="fit" data-fs="${i<2?8:6.5}">${esc(t)}</b>`).join('')}</div></article>`;
+}
+async function tagBlob(s,blob){
+ const L=tagLines(s),W=700,LH=68,BH=L.length*LH+40,PH=795,cv=document.createElement('canvas');cv.width=W;cv.height=PH+BH;const g=cv.getContext('2d');
+ g.fillStyle='#fff';g.fillRect(0,0,W,PH+BH);
+ if(blob){const bm=await createImageBitmap(blob),r=Math.max(W/bm.width,PH/bm.height),dw=bm.width*r,dh=bm.height*r;
+  g.save();g.beginPath();g.rect(0,0,W,PH);g.clip();g.drawImage(bm,(W-dw)/2,-(dh-PH)*.2,dw,dh);g.restore();bm.close&&bm.close()}
+ else{g.fillStyle='#e6ebf2';g.fillRect(0,0,W,PH)}
+ g.textAlign='center';g.textBaseline='middle';g.fillStyle='#000';
+ const put=(txt,y,size,halo)=>{let f=size;g.font=`800 ${f}px Arial,Helvetica,sans-serif`;while(g.measureText(txt).width>W-40&&f>14){f-=2;g.font=`800 ${f}px Arial,Helvetica,sans-serif`}
+  if(halo){g.lineWidth=10;g.strokeStyle='rgba(255,255,255,.85)';g.lineJoin='round';g.strokeText(txt,W/2,y)}g.fillText(txt,W/2,y)};
+ put(s.dob?dateFr(s.dob):'',72,66,true);
+ L.forEach((t,i)=>put(t.toUpperCase(),PH+20+LH*i+LH/2,i<2?50:40,false));
+ return await new Promise(r=>cv.toBlob(r,'image/jpeg',.93));
+}
+function cardTheme(){return `--card-primary:${safeCol(school.primaryColor,'#0b2a5b')};--card-accent:${safeCol(school.accentColor,'#e2b32c')}`}
+function cardHTML(s,photoUrl,o={}){
+ const showQR=o.qr!==undefined?o.qr:($('optQR')?$('optQR').checked:true);
+ const topCrest=school.crest2||school.crest,schoolLogo=school.crest&&school.crest2?school.crest:(school.crest2||'');
+ const wmSrc=schoolLogo||topCrest;
+ const img=(c,u)=>u?`<img class="${c}" src="${safeImg(u)}" alt="">`:'';
+ const birth=s.dob?esc(dateFr(s.dob)):'Non renseignée';
+ const sexIc=s.sexe==='Féminin'?IC.female:IC.male;
+ const photo=photoUrl?`<img src="${photoUrl}" alt="Photo de ${esc(s.nom)}">`:SILHOUETTE;
+ const obc=cardMode(s.classe)==='tag';
+ const issue=[school.town,'le '+dateFr(school.issueDate)].filter((v,i)=>i===1?!!school.issueDate:!!v).map(esc).join(', ');
+ const sealRatio=school.seal?pngRatio(school.seal):1,combo=sealRatio>1.7;
+ const qr=showQR?QR.svg(qrText(s),'#0a1a33'):'';
+ const cf=CARD_FULL,fs=6.7;
+ const row=(ic,lab,val,cls='')=>`<div class="fr"><div class="lb">${ic}<span>${lab}</span></div><div class="vl ${cls}">${val}</div></div>`;
+ const rows=[row(IC.user,'Nom et prénom :',`<span class="nm fit" data-fs="${fs}">${esc(s.nom)}</span>`)];
+ if(cf.dob)rows.push(row(IC.cal,'Né(e) le :',`<span class="fit" data-fs="${fs}">${birth}${cf.lieu&&s.birth?` <i>à</i> <span class="nm">${esc(s.birth)}</span>`:''}</span>`));
+ if(cf.sexe)rows.push(row(sexIc,'Sexe :',`<span class="fit" data-fs="${fs}">${esc(s.sexe||'Non renseigné')}</span>`));
+ if(cf.mat)rows.push(row(IC.id,cf.code?'Code élève :':'Matricule :',`<span class="fit" data-fs="${fs}">${esc(s.matricule||'Non attribué')}</span>`));
+ if(cf.cls)rows.push(row(IC.cap,'Classe :',`<span class="cls fit" data-fs="${fs}">${esc(s.classe)}</span>`));
+ const ministryFr=esc(school.ministry),ministryEn=esc(school.ministryEn||'');
+ return `<article class="school-card pro-school-card" style="${cardTheme()}"><div class="pc${combo?' combo':''}${qr?'':' noqr'}">
+ ${WAVES}${wmSrc?img('wm',wmSrc):''}${school.building?img('bld',school.building):''}
+ <div class="hd"><div class="tx"><b class="fit" data-fs="5.6">RÉPUBLIQUE DU CAMEROUN</b><i class="fit" data-fs="5.4">${esc(school.mottoFr||'Paix - Travail - Patrie')}</i><hr><span>${ministryFr}</span></div>
+  <div class="cr">${img('',topCrest)}</div>
+  <div class="tx"><b class="fit" data-fs="5.6">REPUBLIC OF CAMEROON</b><i class="fit" data-fs="5.4">${esc(school.mottoEn||'Peace - Work - Fatherland')}</i><hr><span>${ministryEn}</span></div></div>${FLAG_SVG}
+ ${schoolLogo?img('slogo',schoolLogo):''}
+ <div class="sname fit" data-fs="10.5">${esc(school.schoolName||'NOM DE L’ÉTABLISSEMENT')}</div>${SWOOSH}
+ <div class="rbw"><i></i><i></i><div class="rb">CARTE D’IDENTITÉ SCOLAIRE</div><i></i><i></i></div>
+ <div class="ph${obc?' obc':''}">${obc?obcPhoto(photo,s):photo}</div>
+ <div class="fl${rows.length<=3?' few':''}">${rows.join('')}</div>
+ ${qr?'<div class="yb"></div>':''}<div class="yg"></div>
+ <div class="yr">${IC.cap}<div><span class="t1">Année scolaire</span><span class="t2">${esc(String(year).replace('/',' / '))}</span></div></div>
+ ${qr?`<div class="qr">${qr}</div>`:''}
+ <div class="dv"></div>
+ <div class="sg"><div class="d fit" data-fs="5.8">${issue}</div><div class="t fit" data-fs="6.6">${esc(school.signatory)}</div></div>
+ ${school.signature?img('sig',school.signature):''}${school.seal?img('sl'+(combo?' combo':''),school.seal):''}
+ </div></article>`;
+}
+function backHTML(){
+ const logo=school.crest||school.crest2;
+ return `<article class="school-card pro-school-card" style="${cardTheme()}"><div class="pc back">${WAVES}${FLAG_SVG}
+ <div class="hd2"><span class="fit" data-fs="9">${esc(school.schoolName||'')}</span></div>
+ <div class="bk">${logo?`<img src="${safeImg(logo)}" alt="">`:''}
+  ${school.address?`<div>${esc(school.address)}${school.town&&!norm(school.address).includes(norm(school.town))?' — '+esc(school.town):''}</div>`:''}${school.phone?`<div>Tél. : ${esc(school.phone)}</div>`:''}
+  <div class="warn">Cette carte est strictement personnelle.<br>Si elle est trouvée, merci de la rapporter à l’établissement.</div>
+  <div>This card is strictly personal. If found, please return it to the school.</div>
+  <div>Valable pour l’année scolaire ${esc(year)}</div></div>
+ <div class="sgn"><span>Signature du titulaire</span><span>${esc(school.town||'')}</span></div></div></article>`;
+}
+function fitText(root){
+ root.querySelectorAll('.fit').forEach(el=>{
+  const base=parseFloat(el.dataset.fs)||8,min=base*.5;let fs=base;el.style.fontSize=fs+'pt';
+  while(el.scrollWidth>el.clientWidth+.5&&fs>min){fs-=.2;el.style.fontSize=fs+'pt'}
+ });
+}
+
+async function photoURLs(list){
+ const m=new Map();
+ // Une photo défectueuse ou une lecture IndexedDB lente ne doit jamais bloquer tout le PDF.
+ for(const s of list){
+  if(!s.hasPhoto)continue;
+  try{
+   const p=await Promise.race([dbGet('photos',s.id),new Promise((_,rej)=>setTimeout(()=>rej(new Error('Lecture photo trop longue')),5000))]);
+   if(p?.card instanceof Blob)m.set(s.id,URL.createObjectURL(p.card));
+  }catch(err){console.warn('Photo ignorée pour la carte',s.id,err)}
+ }
+ return m;
+}
+const BTN_TXT='Préparer les cartes → imprimer / PDF';
+function resetPrintBtn(){const b=$('btnPrint');b.disabled=false;b.dataset.busy='0';b.textContent=BTN_TXT}
+function afterPrintPrompt(){
+ const ps=printSession;if(!ps||ps.asked)return;ps.asked=true;
+ setTimeout(async()=>{
+  if(ps.ids.length&&confirm(`Marquer ${ps.ids.length} carte(s) comme imprimées ?\n(Vous pourrez ainsi n’imprimer plus tard que les nouvelles cartes.)`))await markPrinted(ps.ids);
+ },400);
+}
+window.addEventListener('message',e=>{if(e.data&&e.data.type==='scp-printed')afterPrintPrompt()});
+$('btnPrint').onclick=async()=>{
+ const btn=$('btnPrint');
+ if(btn.dataset.busy==='1')return;
+ const arr=selectedStudents();
+ if(!arr.length)return toast('Aucun élève à imprimer pour cette sélection.','err');
+ if(!school.schoolName.trim()){showTab('school');return toast('Renseignez le nom de l’établissement.','err')}
+ // Ouvre la fenêtre pendant le clic : Android bloque window.open()/print() après plusieurs await.
+ let printWin=null;
+ try{printWin=window.open('about:blank','_blank')}catch(e){}
+ if(!printWin){toast('Le navigateur a bloqué la fenêtre d’impression. Autorisez les fenêtres contextuelles pour ce fichier puis réessayez.','err');return}
+ btn.dataset.busy='1';btn.disabled=true;btn.textContent='Préparation…';
+ let urls=new Map();
+ try{
+  toast('Préparation des cartes…');
+  urls=await photoURLs(arr);
+  const area=$('printArea'),perPage=cardsPerPage();
+  let cardsHtml='';
+  const tagS=[],cardS=arr;
+  for(let i=0;i<cardS.length;i+=perPage){
+   const chunk=cardS.slice(i,i+perPage);
+   cardsHtml+=`<div class="print-page">${chunk.map(s=>cardHTML(s,urls.get(s.id))).join('')}</div>`;
+   if($('printBack').checked){
+    // recto-verso retournement bord long : le verso de la colonne gauche est à droite
+    let b='';for(let j=0;j<chunk.length;j+=2)b+=chunk[j+1]?backHTML()+backHTML():'<div></div>'+backHTML();
+    cardsHtml+=`<div class="print-page">${b}</div>`;
+   }
+  }
+  for(let i=0;i<tagS.length;i+=16)cardsHtml+=`<div class="print-page tags">${tagS.slice(i,i+16).map(s=>tagHTML(s,urls.get(s.id))).join('')}</div>`;
+  area.className='print-area measuring';applyFormat(area);area.innerHTML=cardsHtml;fitText(area);
+  const imgs=[...area.querySelectorAll('img')];
+  await Promise.race([
+   Promise.all(imgs.map(img=>new Promise(resolve=>{
+    if(img.complete)return resolve();
+    const finish=()=>{img.removeEventListener('load',finish);img.removeEventListener('error',finish);resolve()};
+    img.addEventListener('load',finish,{once:true});img.addEventListener('error',finish,{once:true});setTimeout(finish,1800);
+   }))),
+   new Promise(resolve=>setTimeout(resolve,2200))
+  ]);
+  // IMPORTANT : on reprend le HTML APRÈS ajustement des textes, avec le format choisi (variables CSS)
+  const fitted=area.innerHTML,areaStyle=area.getAttribute('style')||'',outline=$('cutMarks').checked?'':' no-outline';
+  area.className='print-area';area.innerHTML='';
+  const styles=[...document.querySelectorAll('style')].map(s=>s.textContent).join('\n');
+  const printDoc=`<!DOCTYPE html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Cartes scolaires - impression</title><style>${styles}
+  html,body{margin:0;padding:0;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .print-area{display:block!important;visibility:visible!important;position:static!important;left:auto!important;top:auto!important}
+  @media screen{body{padding:8px;background:#e9edf2}.print-page{margin:0 auto 12px}}
+  @media print{body{padding:0;background:#fff}.print-page{break-after:page;page-break-after:always}.print-page:last-child{break-after:auto;page-break-after:auto}}
+  </style></head><body><main class="print-area${outline}" style="${areaStyle}">${fitted}</main>
+  <script>window.addEventListener('afterprint',function(){try{window.opener&&window.opener.postMessage({type:'scp-printed'},'*')}catch(e){}})<\/script></body></html>`;
+  printWin.document.open();printWin.document.write(printDoc);printWin.document.close();
+  printSession={ids:arr.filter(s=>s.hasPhoto&&urls.has(s.id)).map(s=>s.id),urls:[...urls.values()],asked:false};
+  const cleanup=()=>{const ps=printSession;if(ps){printSession=null;ps.urls.forEach(u=>URL.revokeObjectURL(u))}resetPrintBtn()};
+  printWin.addEventListener('load',()=>{
+   setTimeout(()=>{try{printWin.focus();printWin.print()}catch(err){console.error(err);toast('Impossible d’ouvrir l’impression. Utilisez le menu du navigateur > Imprimer.','err')}},500);
+  },{once:true});
+  printWin.addEventListener('afterprint',afterPrintPrompt);
+  printWin.addEventListener('pagehide',cleanup,{once:true});
+  btn.textContent='Document prêt — impression ouverte';
+  toast('Document préparé. Choisissez « Enregistrer au format PDF » dans la fenêtre ouverte.');
+ }catch(err){
+  console.error('Erreur de préparation PDF',err);
+  urls.forEach(u=>URL.revokeObjectURL(u));
+  try{printWin.close()}catch(e){}
+  $('printArea').innerHTML='';$('printArea').className='print-area';
+  toast('La préparation a échoué : '+(err?.message||'erreur inconnue'),'err');
+  resetPrintBtn();
+ }
+};
+async function markPrinted(ids){
+ const set=new Set(ids),now=Date.now(),ch=students.filter(s=>set.has(s.id));ch.forEach(s=>s.printedAt=now);
+ await dbTx('students',t=>ch.forEach(s=>t.objectStore('students').put(s)));refreshAll();toast(`${ch.length} carte(s) marquée(s) imprimée(s).`);
+}
+$('btnMarkPrinted').onclick=async()=>{
+ const ids=selectedStudents().filter(s=>s.hasPhoto).map(s=>s.id);
+ if(!ids.length)return toast('Aucune carte avec photo dans la sélection.','err');
+ if(confirm(`Marquer ${ids.length} carte(s) comme imprimées ?`))await markPrinted(ids);
+};
+$('btnPreview').onclick=async()=>{
+ const s=selectedStudents()[0]||{nom:'NOM ET PRÉNOM DE L’ÉLÈVE',dob:'2012-01-01',birth:'Ville',sexe:'Masculin',matricule:'000000',classe:'6e A',hasPhoto:false};
+ const box=$('previewCard');previewUrls.forEach(u=>URL.revokeObjectURL(u));previewUrls=[];
+ const urls=await photoURLs([s]);previewUrls=[...urls.values()];
+ $('previewBox').hidden=false;applyFormat(box);
+ box.innerHTML=cardHTML(s,urls.get(s.id))+($('printBack').checked?backHTML():'');
+ box.style.display='flex';box.style.gap='16px';box.style.flexWrap='wrap';fitText(box);
+};
+let previewUrls=[];
+
+$('btnTagZip').onclick=async()=>{
+ const list=selectedStudents().filter(s=>cardMode(s.classe)==='tag'&&s.hasPhoto);
+ if(!list.length)return toast('Aucun élève avec photo dans une classe réglée sur « Photo avec écriture ».','err');
+ const files=[],used=new Set(),btn=$('btnTagZip');btn.disabled=true;const t0=btn.textContent;
+ try{
+  let k=0;
+  for(const s of list){
+   btn.textContent=`Création ${++k}/${list.length}…`;
+   const p=await dbGet('photos',s.id);if(!(p&&p.card instanceof Blob))continue;
+   const jb=await tagBlob(s,p.card);
+   let base=(s.matricule||s.nom).replace(/[^A-Za-z0-9À-ÿ_-]+/g,'_')+'_'+s.nom.replace(/[^A-Za-z0-9À-ÿ]+/g,'_');base=base.slice(0,80);let n=base,i=2;while(used.has(n))n=base+'_'+i++;used.add(n);
+   files.push({name:n+'.jpg',data:new Uint8Array(await jb.arrayBuffer())});
+  }
+  if(!files.length)return toast('Aucune photo exploitable.','err');
+  download(zipBlob(files),`photos_ecrites_${year.replace('/','-')}.zip`);toast(`${files.length} photo(s) avec écriture exportée(s).`);
+ }catch(e){console.error(e);toast('Export impossible : '+(e.message||e),'err')}finally{btn.disabled=false;btn.textContent=t0}
+};
+
+/* ---------- sauvegarde / restauration ---------- */
+async function exportBackup(scope){
+ try{
+  toast('Préparation de la sauvegarde…');
+  const list=scope==='current'?[school]:schools,inc=$('bkOriginals').checked,data={app:'SchoolCardPro',version:3,exportedAt:new Date().toISOString(),schools:list,students:[]},files=[];
+  for(const sc of list){
+   for(const st of await dbByIndex('students',sc.id)){
+    data.students.push(st);const p=await dbGet('photos',st.id);
+    if(p?.card)files.push({name:`photos/${st.id}.jpg`,data:new Uint8Array(await p.card.arrayBuffer())});
+    if(inc&&p?.original)files.push({name:`originals/${st.id}.jpg`,data:new Uint8Array(await p.original.arrayBuffer())});
+   }
+  }
+  files.unshift({name:'data.json',data:new TextEncoder().encode(JSON.stringify(data))});
+  download(zipBlob(files),`sauvegarde_schoolcard_${todayISO()}.zip`);
+  localStorage.setItem('sc_lastBackup',String(Date.now()));renderDashboard();toast('Sauvegarde créée. Conservez le fichier en lieu sûr.');
+ }catch(err){toast('Sauvegarde impossible : '+err.message,'err')}
+}
+$('btnBackupAll').onclick=()=>exportBackup('all');$('btnBackupCurrent').onclick=()=>exportBackup('current');
+function isImageBytes(u){return u&&u.length>8&&((u[0]===0xFF&&u[1]===0xD8)||(u[0]===0x89&&u[1]===0x50)||(u[0]===0x52&&u[1]===0x49))}
+function dataUrlToBlob(u){
+ const m=/^data:(image\/(?:jpeg|png|webp));base64,([A-Za-z0-9+/=]+)$/.exec(u||'');if(!m)return null;
+ const bin=atob(m[2]),a=new Uint8Array(bin.length);for(let i=0;i<bin.length;i++)a[i]=bin.charCodeAt(i);return new Blob([a],{type:m[1]});
+}
+async function thumbFromBlob(b){const i=await loadImage(b,'photo'),c=document.createElement('canvas');c.width=90;c.height=105;c.getContext('2d').drawImage(i,0,0,90,105);return c.toDataURL('image/jpeg',.7)}
+/* Normalise une ancienne photo (dataURL) vers le format v2 */
+async function legacyPhotoDraft(dataUrl){
+ const blob=dataUrlToBlob(dataUrl);if(!blob)return null;
+ const img=await loadImage(blob,'photo'),ratio=img.naturalWidth/img.naturalHeight;
+ if(Math.abs(ratio/PORTRAIT_R-1)<.06){
+  const c=document.createElement('canvas');c.width=CARD_W;c.height=CARD_H;c.getContext('2d').drawImage(img,0,0,CARD_W,CARD_H);
+  const tc=document.createElement('canvas');tc.width=90;tc.height=105;tc.getContext('2d').drawImage(c,0,0,90,105);
+  return{card:await toBlob(c,.9),original:blob,thumb:tc.toDataURL('image/jpeg',.7)};
+ }
+ return processPortrait(img,img.naturalWidth,img.naturalHeight,.15,{raw:false});
+}
+$('restoreFile').onchange=async e=>{
+ const f=e.target.files[0];e.target.value='';if(!f)return;
+ try{
+  const buf=await f.arrayBuffer(),h=new Uint8Array(buf,0,2);let data,zip=null;
+  if(h[0]===0x50&&h[1]===0x4B){zip=await readZip(buf);if(!zip['data.json'])throw new Error('Sauvegarde invalide : data.json absent.');data=JSON.parse(new TextDecoder().decode(await zip['data.json']()))}
+  else data=JSON.parse(new TextDecoder().decode(buf));
+  const rawSchools=Array.isArray(data.schools)?data.schools:(data.school?[{...data.school,id:data.school.id||uid()}]:[]);
+  if(!rawSchools.length)throw new Error('Aucun établissement dans ce fichier.');
+  const rawStudents=Array.isArray(data.students)?data.students:[];
+  if(!confirm(`Restaurer ${rawSchools.length} établissement(s) et ${rawStudents.length} élève(s) ?\n\nLes établissements portant le même identifiant seront REMPLACÉS ; les autres établissements de ce logiciel sont conservés.`))return;
+  toast('Restauration en cours…');
+  const owner=new Map((await dbAll('students')).map(s=>[s.id,s.schoolId]));let nS=0,nP=0;const restoredIds=[],before=[...schools];
+  for(const rs of rawSchools){
+   const sc=cleanSchool(rs,null);restoredIds.push(sc.id);const _unused=0,mine=rawStudents.filter(s=>s.schoolId===rs.id||(!s.schoolId&&rawSchools.length===1));
+   const exist=schools.find(x=>x.id===sc.id);
+   if(exist){const sts=await dbByIndex('students',sc.id),phs=await dbByIndex('photos',sc.id);await dbTx(['students','photos'],t=>{sts.forEach(s=>t.objectStore('students').delete(s.id));phs.forEach(p=>t.objectStore('photos').delete(p.id))})}
+   const outS=[],outP=[];
+   for(const o of mine){
+    const st=cleanStudent(o,sc.id,sc.currentYear);if(!st)continue;
+    const oldId=st.id;if(owner.has(st.id)&&owner.get(st.id)!==sc.id)st.id=uid();owner.set(st.id,sc.id);
+    let card=null,orig=null;
+    if(zip&&zip[`photos/${oldId}.jpg`]){const u=await zip[`photos/${oldId}.jpg`]();if(isImageBytes(u))card=new Blob([u],{type:'image/jpeg'});
+     if(zip[`originals/${oldId}.jpg`]){const uo=await zip[`originals/${oldId}.jpg`]();if(isImageBytes(uo))orig=new Blob([uo],{type:'image/jpeg'})}}
+    else if(o.photo){try{const d=await legacyPhotoDraft(o.photo);if(d){card=d.card;orig=d.original}}catch(err){console.warn(err)}}
+    if(card){
+     st.hasPhoto=true;st.thumb=/^data:image\/jpeg;base64,[A-Za-z0-9+/=]{20,30000}$/.test(o.thumb||'')?o.thumb:await thumbFromBlob(card).catch(()=>'');
+     outP.push({id:st.id,schoolId:sc.id,card,original:orig||card,updatedAt:Date.now()});nP++;
+    }
+    if(!sc.years.includes(st.year)){sc.years.push(st.year);sc.classes[st.year]=[]}
+    outS.push(st);nS++;
+   }
+   await dbTx(['schools','students','photos'],t=>{t.objectStore('schools').put(sc);outS.forEach(s=>t.objectStore('students').put(s));outP.forEach(p=>t.objectStore('photos').put(p))});
+  }
+  for(const old of before){if(restoredIds.includes(old.id))continue;if((old.schoolName==='Mon établissement'||old.schoolName==='Mon établissement')&&!old.crest&&!old.crest2&&!(await dbByIndex('students',old.id)).length){await dbTx('schools',t=>t.objectStore('schools').delete(old.id))}}
+  if(restoredIds.length){localStorage.setItem('sc_current',restoredIds[0]);localStorage.removeItem('sc_year_'+restoredIds[0])}
+  schools=await dbAll('schools');await loadTenant();toast(`Restauration terminée : ${nS} élève(s), ${nP} photo(s).`);
+ }catch(err){toast('Restauration impossible : '+err.message,'err')}
+};
+
+/* ---------- migration depuis la v1 (localStorage + photos base64) ---------- */
+async function migrateV1(){
+ if(localStorage.getItem('sc_migrated2'))return;
+ let old=[];try{old=JSON.parse(localStorage.getItem('schoolCardsSchools')||'[]')}catch(e){}
+ if(!(await dbAll('schools')).length&&old.length)for(const o of old)await dbPut('schools',cleanSchool(o,String(o.schoolYear||'')));
+ const sc=await dbAll('schools'),all=await dbAll('students');
+ for(const s of all){
+  if(!s.year||s.photo||s.dob&&!/^\d{4}-\d\d-\d\d$/.test(s.dob)||s.sexe&&!['Masculin','Féminin'].includes(s.sexe)){
+   const owner=sc.find(x=>x.id===s.schoolId)||sc[0],n={...s};delete n.photo;delete n.photoEnhanced;
+   n.schoolId=owner?.id||s.schoolId;n.year=s.year||owner?.currentYear||defaultYear();
+   n.dob=toISODate(s.dob)||'';n.sexe=normSexe(s.sexe);n.hasPhoto=!!n.hasPhoto;n.thumb=n.thumb||'';n.printedAt=n.printedAt||null;
+   let ph=null;
+   if(s.photo){try{const d=await legacyPhotoDraft(s.photo);if(d){n.hasPhoto=true;n.thumb=d.thumb;ph={id:s.id,schoolId:n.schoolId,card:d.card,original:d.original,updatedAt:Date.now()}}}catch(e){console.warn(e)}}
+   await dbTx(['students','photos'],t=>{t.objectStore('students').put(n);if(ph)t.objectStore('photos').put(ph)});
+  }
+ }
+ localStorage.setItem('sc_migrated2','1');
+}
+
+/* ---------- options de traitement photo (mémorisées) ---------- */
+function bindOpt(ids,key,def){const on=optOn(key,def);ids.forEach(id=>{const el=$(id);if(!el)return;el.checked=on;el.onchange=()=>{try{localStorage.setItem(key,el.checked?'1':'0')}catch(e){}ids.forEach(o=>{if($(o))$(o).checked=el.checked})}})}
+bindOpt(['camEnh','phEnh'],'sc_enh',true);bindOpt(['camBg','phBg'],'sc_bg',false);bindOpt(['phSmart'],'sc_smart',true);
+/* ---------- démarrage ---------- */
+window.addEventListener('error',e=>toast('Erreur : '+e.message,'err'));
+window.addEventListener('unhandledrejection',e=>toast('Erreur : '+(e.reason?.message||e.reason),'err'));
+(async()=>{
+ try{await openDB()}catch(err){document.querySelector('.wrap').innerHTML=`<div class="notice bad"><b>Stockage local indisponible.</b> ${esc(err.message)} Évitez la navigation privée et ouvrez le fichier dans Chrome, Edge ou Firefox.</div>`;return}
+ try{if(navigator.storage?.persist)persisted=await navigator.storage.persist()}catch(e){}
+ $('persistStatus').lastChild.textContent=persisted?'Stockage protégé':'Données locales';
+ await migrateV1();
+ schools=await dbAll('schools');
+ if(!schools.length){const s=defaultSchool('Mon établissement');await dbPut('schools',s);schools=[s]}
+ await loadTenant();
+})();
+</script>
+</body>
+</html>
